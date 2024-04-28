@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "nsp"
+version = "0.1.0"
+description = ""
+authors = ["Damian Trafialek <damian.trafialek@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+playwright = "^1.43.0"
+requests = "^2.31.0"
+poethepoet = "^0.26.0"
+
+[tool.poe.tasks]
+scrape = "python -m nsp.scraper.run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
