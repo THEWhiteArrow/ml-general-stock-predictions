@@ -4,12 +4,13 @@ install:
 
 install-scraper:
 	@echo "Installing scraper..."
-	cd nsp && poetry run poe install-scraper
+	cd nsp && poetry run playwright install-deps
+	cd nsp && poetry run playwright install
 
 
 uninstall-scraper:
 	@echo "Uninstalling scraper..."
-	cd nsp && poetry run poe uninstall-scraper
+	cd nsp && poetry run playwright uninstall
 
 scrape:
 	@echo "Scraping..."
