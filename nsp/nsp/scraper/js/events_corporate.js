@@ -77,7 +77,7 @@ function downloadEventsInfo() {
 
 	const a = document.createElement("a");
 	a.href = url;
-	a.download = "events_corporate_investor.csv";
+	a.download = "events_corporate.csv";
 	a.click();
 }
 

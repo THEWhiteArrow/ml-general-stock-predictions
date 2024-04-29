@@ -31,3 +31,7 @@ typecheck:
 lint:
 	@echo "Linting..."
 	cd nsp && poetry run poe lint
+
+eda:
+	@echo "Running Explorator Data Analysis..."
+	cd nsp && poetry run poe eda

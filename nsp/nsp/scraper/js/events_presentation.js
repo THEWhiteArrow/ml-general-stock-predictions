@@ -93,7 +93,7 @@ function downloadEventsInfo() {
 
 	const a = document.createElement("a");
 	a.href = url;
-	a.download = "events_presentations.csv";
+	a.download = "events_presentation.csv";
 	a.click();
 }
 

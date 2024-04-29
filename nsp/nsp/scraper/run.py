@@ -22,13 +22,13 @@ def run():
 
     download_from_yahoo_api(
         stock_name="NVDA",
-        file_name="nvidia_stocks_history.csv",
+        file_name="stocks_history.csv",
     )
 
     with open(
         os.path.join(
             JS_DIR,
-            "events_presentations.js",
+            "events_presentation.js",
         ),
         "r",
     ) as file:
@@ -41,7 +41,7 @@ def run():
     with open(
         os.path.join(
             JS_DIR,
-            "events_corporate_investors.js",
+            "events_corporate.js",
         ),
         "r",
     ) as file:

@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Damian Trafialek <damian.trafialek@gmail.com>"]
 readme = "README.md"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -14,6 +15,14 @@ requests = "^2.31.0"
 black = "^24.4.2"
 flake8 = "^7.0.0"
 mypy = "^1.10.0"
+ipykernel = "^6.29.4"
+pandas = "^2.2.2"
+scikit-learn = "^1.4.2"
+matplotlib = "^3.8.4"
+seaborn = "^0.13.2"
+numpy = "^1.26.4"
+statsmodels = "^0.14.2"
+
 
 [tool.poe.tasks]
 scrape = "python -m nsp.scraper.run"
@@ -21,7 +30,7 @@ lint = "flake8 ."
 fmt = "black ."
 fmt-check = "black --check ."
 typecheck = "mypy ."
-typecheck-stubs = "mypy --install-types"
+eda = "python -m nsp.eda.eda"
 
 [tool.flake8]
 max-complexity = 10
