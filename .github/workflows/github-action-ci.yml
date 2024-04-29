@@ -43,3 +43,9 @@ jobs:
 
             - name: Run scraper
               run: make scrape
+
+            - name: Publish scraper artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: scraper-artifacts
+                  path: nsp/data/*csv
