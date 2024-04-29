@@ -41,7 +41,8 @@
 				"mechatroner.rainbow-csv",
 				"ms-python.black-formatter",
 				"ms-vscode.makefile-tools",
-				"njpwerner.autodocstring"
+				"njpwerner.autodocstring",
+				"github.vscode-github-actions"
 			]
 		}
 	},
