@@ -16,13 +16,12 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v2
 
-            - name: Set up Docker container
-              uses: docker://python:3.12-bullseye
+            - name: Set up Python 3.12
+              uses: actions/setup-python@v2
+              with:
+                  python-version: 3.12
 
-            - name: Check Python version
-              run: python --version
-
-            - name: Install Poetry
+            - name: Set up Poetry
               run: |
                   pip install poetry
                   poetry --version
