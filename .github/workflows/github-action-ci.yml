@@ -22,6 +22,9 @@ jobs:
             - name: Set up Docker container
               uses: docker://python:3.12-bullseye
 
+            - name: Check Python version
+              run: python --version
+
             - name: Install Poetry
               run: |
                   pip install poetry
