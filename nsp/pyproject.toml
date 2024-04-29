@@ -11,6 +11,8 @@ playwright = "^1.43.0"
 poethepoet = "^0.26.0"
 flake8-pyproject = "^1.2.3"
 requests = "^2.31.0"
+black = "^24.4.2"
+flake8 = "^7.0.0"
 
 [tool.poe.tasks]
 install-scraper = "playwright install-deps && playwright install"
