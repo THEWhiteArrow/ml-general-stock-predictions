@@ -34,7 +34,12 @@ def download_from_website_using_js(url: str, js: str):
 
         print(f"Downloaded file name: {download.suggested_filename}")
 
-        download.save_as(os.path.join(DATA_DIR, download.suggested_filename))
+        download.save_as(
+            os.path.join(
+                DATA_DIR,
+                download.suggested_filename,
+            )
+        )
         page.close()
         browser.close()
 
@@ -48,14 +53,20 @@ def download_from_yahoo_api(stock_name: str, file_name: str):
             "period1": "0",
             "period2": int(datetime.datetime.now().timestamp()),
         },
-        headers={"Accept": "text/csv", "User-Agent": "Mozilla/5.0"},
+        headers={
+            "Accept": "text/csv",
+            "User-Agent": "Mozilla/5.0",
+        },
         timeout=5,
     )
 
     if response.status_code == 200:
         data = response.text
 
-        with open(os.path.join(DATA_DIR, file_name), "w") as f:
+        with open(
+            os.path.join(DATA_DIR, file_name),
+            "w",
+        ) as f:
             f.write(data)
 
         print(f"Downloaded yahoo finance history: {file_name}")

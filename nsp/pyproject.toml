@@ -8,11 +8,30 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 playwright = "^1.43.0"
-requests = "^2.31.0"
 poethepoet = "^0.26.0"
+flake8-pyproject = "^1.2.3"
+requests = "^2.31.0"
 
 [tool.poe.tasks]
+install-scraper = "playwright install-deps && playwright install"
+uninstall-scraper = "playwright uninstall"
 scrape = "python -m nsp.scraper.run"
+lint = "flake8 ."
+fmt = "black ."
+fmt-check = "black --check ."
+typecheck = "mypy ."
+typecheck-stubs = "mypy --install-types"
+
+[tool.flake8]
+max-complexity = 10
+ignore = "E501,W503,W504"
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+ignore_missing_imports = true
+disable_error_code = "import-untyped"
 
 [build-system]
 requires = ["poetry-core"]
