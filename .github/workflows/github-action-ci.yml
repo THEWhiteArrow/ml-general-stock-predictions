@@ -37,3 +37,9 @@ jobs:
 
             - name: Run type checking
               run: make typecheck
+
+            - name: Set up scraper
+              run: make install-scraper
+
+            - name: Run scraper
+              run: make scrape
