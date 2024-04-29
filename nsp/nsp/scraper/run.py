@@ -7,15 +7,6 @@ from nsp.scraper.utils import (
 
 
 def run():
-    """
-    The following code snippet has one aim: to download data that is used in the Machine Learning model.
-    The data that is being downloaded is up-to-date meaning
-    that it is possible to automate the process of downloading the data.
-    It possibly means that the project could be run every day with the help
-    of a scheduler and provide the most recent data and predictions.
-
-    The code snippet is a part of the run.py file that is located in the nsp/scraper directory.
-    """
 
     JS_DIR = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
