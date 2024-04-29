@@ -27,11 +27,6 @@ jobs:
                   pip install poetry
                   poetry --version
 
-            - name: Set up Poetry
-              run: |
-                  pip install poetry
-                  poetry config virtualenvs.create false
-
             - name: Install dependencies
               run: make install
 
