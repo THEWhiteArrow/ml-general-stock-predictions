@@ -1,8 +1,8 @@
-# NVIDIA STOCKS FORECASTING
+# GENERAL STOCK PREDICTIONS
 
 ## Introduction
 
-This project aims to forecast the stock prices of NVIDIA Corporation (NVDA) using a machine learning model. The dataset used in this project is obtained from Yahoo Finance. The goal of this project is to predict the closing price of NVDA stocks for the next 30 days.
+This project aims to forecast the stock prices of multiple companies using a machine learning model. The dataset used in this project is obtained from Yahoo Finance.
 
 ## Visual Studio Code
 
@@ -16,12 +16,6 @@ Project is based on poetry for dependency management. To install the dependencie
 make install
 ```
 
-In order to install automation that gathers the most recent data run the following command:
-
-```bash
-make install-scrape
-```
-
 ## Usage
 
 Not yet implemented
@@ -31,8 +25,6 @@ Not yet implemented
 The dataset used in this project is obtained from:
 
 -   Yahoo Finance
--   Nvidia Events and Presentations
--   Nvidia Corporate and Investor Events Calendar
 
 The gathering of the dataset is fully automated meaning it can be updated at any time to include the latest data. The dataset is stored in the `data` directory.
 
