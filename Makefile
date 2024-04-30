@@ -2,16 +2,6 @@ install:
 	@echo "Installing dependencies..."
 	cd gsp && poetry install
 
-install-scraper:
-	@echo "Installing scraper..."
-	cd gsp && poetry run playwright install-deps
-	cd gsp && poetry run playwright install
-
-
-uninstall-scraper:
-	@echo "Uninstalling scraper..."
-	cd gsp && poetry run playwright uninstall
-
 scrape:
 	@echo "Scraping..."
 	cd gsp && poetry run poe scrape

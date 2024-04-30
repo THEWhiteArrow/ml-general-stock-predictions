@@ -1,11 +1,14 @@
-import os
 import requests
 import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-def download_from_yahoo_api(stock_id: str, save_dir: str):
+def download_from_yahoo_api(
+    stock_id: str,
+) -> str:
     url = f"https://query1.finance.yahoo.com/v7/finance/download/{stock_id}"
-    file_name = f"{stock_id}.csv"
 
     response = requests.get(
         url=url,
@@ -19,19 +22,12 @@ def download_from_yahoo_api(stock_id: str, save_dir: str):
         },
         timeout=5,
     )
-
     if response.status_code == 200:
         data = response.text
-
-        with open(
-            os.path.join(save_dir, file_name),
-            "w",
-        ) as f:
-            f.write(data)
-
-        print(f"Downloaded yahoo finance history: {file_name}")
+        logger.info(f"Downloaded yahoo finance history: {stock_id}")
+        return data
 
     else:
         raise Exception(
-            f"An error occurred while downloading NVIDIA stocks history. Status code: {response.status_code}"
+            f"An error occurred while downloading {stock_id} stocks history. Status code: {response.status_code}"
         )
