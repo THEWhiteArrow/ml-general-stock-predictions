@@ -1,13 +1,12 @@
 [tool.poetry]
-name = "nsp"
-version = "0.1.0"
+name = "gsp"
+version = "0.2.0"
 description = ""
 authors = ["Damian Trafialek <damian.trafialek@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-playwright = "^1.43.0"
 poethepoet = "^0.26.0"
 flake8-pyproject = "^1.2.3"
 requests = "^2.31.0"
@@ -21,7 +20,6 @@ lint = "flake8 ."
 fmt = "black ."
 fmt-check = "black --check ."
 typecheck = "mypy ."
-typecheck-stubs = "mypy --install-types"
 
 [tool.flake8]
 max-complexity = 10
