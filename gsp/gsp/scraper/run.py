@@ -25,13 +25,23 @@ def run():
         for stock_company in stock_setup[area]:
             data = download_from_yahoo_api(stock_id=stock_company["stock_id"])
 
-            df = pd.read_csv(io.StringIO(data))
+            df = pd.read_csv(
+                io.StringIO(data),
+                dtype={
+                    "Date": "period[D]",
+                    "Open": "float",
+                    "High": "float",
+                    "Low": "float",
+                    "Close": "float",
+                    "Volume": "int",
+                },
+            )
             df["Area"] = area
             df["Name"] = stock_company["stock_id"]
 
             stock_data_df = pd.concat([stock_data_df, df], axis=0)
 
-    stock_data_df.to_csv(f"{SCRAPED_DIR}/stock_data.csv")
+    stock_data_df.to_csv(f"{SCRAPED_DIR}/stocks.csv", index=False)
     logger.info("Data saved successfully")
 
 

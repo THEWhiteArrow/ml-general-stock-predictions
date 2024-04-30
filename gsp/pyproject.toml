@@ -17,6 +17,7 @@ pandas = "^2.2.2"
 matplotlib = "^3.8.4"
 scikit-learn = "^1.4.2"
 seaborn = "^0.13.2"
+ipykernel = "^6.29.4"
 
 [tool.poe.tasks]
 scrape = "python -m gsp.scraper.run"
