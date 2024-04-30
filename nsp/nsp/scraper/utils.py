@@ -44,9 +44,9 @@ def download_from_website_using_js(url: str, js: str):
         browser.close()
 
 
-def download_from_yahoo_api(stock_name: str, file_name: str):
+def download_from_yahoo_api(stock_name: str):
     url = f"https://query1.finance.yahoo.com/v7/finance/download/{stock_name}"
-
+    file_name = f"{stock_name}.csv"
     response = requests.get(
         url=url,
         params={

@@ -22,7 +22,6 @@ def run():
 
     download_from_yahoo_api(
         stock_name="NVDA",
-        file_name="stocks_history.csv",
     )
 
     with open(
