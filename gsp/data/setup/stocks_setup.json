@@ -35,7 +35,7 @@
 		{ "company_name": "Robinhood", "stock_id": "HOOD" },
 		{ "company_name": "Airbnb", "stock_id": "ABNB" }
 	],
-	"space exploration": [
+	"space_exploration": [
 		{ "company_name": "Boeing", "stock_id": "BA" },
 		{ "company_name": "Lockheed Martin", "stock_id": "LMT" },
 		{ "company_name": "Northrop Grumman", "stock_id": "NOC" },

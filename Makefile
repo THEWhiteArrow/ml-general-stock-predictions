@@ -21,3 +21,11 @@ typecheck:
 lint:
 	@echo "Linting..."
 	cd gsp && poetry run poe lint
+
+test:
+	@echo "Testing..."
+	cd gsp && poetry run poe test
+
+test-coverage:
+	@echo "Testing with coverage..."
+	cd gsp && poetry run poe coverage
