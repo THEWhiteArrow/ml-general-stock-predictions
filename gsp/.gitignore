@@ -1,3 +1,4 @@
 data/scraped/*.csv
 *.log
+.pytest_cache
 .coverage
