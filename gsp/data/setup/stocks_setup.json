@@ -39,15 +39,16 @@
 		{ "company_name": "Boeing", "stock_id": "BA" },
 		{ "company_name": "Lockheed Martin", "stock_id": "LMT" },
 		{ "company_name": "Northrop Grumman", "stock_id": "NOC" },
-		{ "company_name": "SpaceX", "stock_id": "SPXC-USD" },
-		{ "company_name": "Blue Origin", "stock_id": "BLUE" }
+		{ "company_name": "Blue Origin", "stock_id": "BLUE" },
+		{ "company_name": "Virgin Galactic", "stock_id": "SPCE" }
 	],
 	"sustainability": [
 		{ "company_name": "Tesla", "stock_id": "TSLA" },
 		{ "company_name": "NextEra Energy", "stock_id": "NEE" },
 		{ "company_name": "Vestas Wind Systems", "stock_id": "VWS.CO" },
 		{ "company_name": "First Solar", "stock_id": "FSLR" },
-		{ "company_name": "Enphase Energy", "stock_id": "ENPH" }
+		{ "company_name": "Enphase Energy", "stock_id": "ENPH" },
+		{ "company_name": "Relativity Space", "stock_id": "RS" }
 	],
 	"biotech": [
 		{ "company_name": "Moderna", "stock_id": "MRNA" },
@@ -69,12 +70,5 @@
 		{ "company_name": "Merck", "stock_id": "MRK" },
 		{ "company_name": "UnitedHealth Group", "stock_id": "UNH" },
 		{ "company_name": "Abbott Laboratories", "stock_id": "ABT" }
-	],
-	"defence_army": [
-		{ "company_name": "Lockheed Martin", "stock_id": "LMT" },
-		{ "company_name": "Boeing", "stock_id": "BA" },
-		{ "company_name": "Northrop Grumman", "stock_id": "NOC" },
-		{ "company_name": "Raytheon Technologies", "stock_id": "RTX" },
-		{ "company_name": "General Dynamics", "stock_id": "GD" }
 	]
 }
