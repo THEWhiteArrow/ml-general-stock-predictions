@@ -38,5 +38,14 @@ jobs:
             - name: Run type checking
               run: make typecheck
 
-            - name: Run tests
-              run: make test
+            - name: Run scraper
+              run: make scrape
+
+            - name: Run coverage
+              run: make test-coverage
+
+            - name: Upload coverage report
+              uses: actions/upload-artifact@v2
+              with:
+                  name: coverage
+                  path: gsp/.coverage
