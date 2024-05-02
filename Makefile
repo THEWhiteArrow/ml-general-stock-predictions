@@ -28,4 +28,4 @@ test:
 
 test-coverage:
 	@echo "Testing with coverage..."
-	cd gsp && poetry run poe coverage
+	cd gsp && poetry run poe test-cov
