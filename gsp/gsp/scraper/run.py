@@ -1,6 +1,11 @@
 import json
+import pandas as pd
+import io
+import logging
 from gsp.scraper.download import download_from_yahoo_api
 from data import SETUP_STOCK_FILE_PATH, SCRAPED_DIR, SETUP_STOCK_ALIAS
+
+logger = logging.getLogger(__name__)
 
 
 def run():
@@ -14,10 +19,30 @@ def run():
     The code snippet is a part of the run.py file that is located in the nsp/scraper directory.
     """
     stock_setup: SETUP_STOCK_ALIAS = json.load(open(SETUP_STOCK_FILE_PATH, "r"))
+    stock_data_df = pd.DataFrame()
 
-    for category in stock_setup:
-        for stock_company in stock_setup[category]:
-            download_from_yahoo_api(stock_id=stock_company["stock_id"], save_dir=SCRAPED_DIR)
+    for area in stock_setup:
+        for stock_company in stock_setup[area]:
+            data = download_from_yahoo_api(stock_id=stock_company["stock_id"])
+
+            df = pd.read_csv(
+                io.StringIO(data),
+                dtype={
+                    "Date": "period[D]",
+                    "Open": "float",
+                    "High": "float",
+                    "Low": "float",
+                    "Close": "float",
+                    "Volume": "int",
+                },
+            )
+            df["Area"] = area
+            df["Name"] = stock_company["stock_id"]
+
+            stock_data_df = pd.concat([stock_data_df, df], axis=0)
+
+    stock_data_df.to_csv(f"{SCRAPED_DIR}/stocks.csv", index=False)
+    logger.info("Data saved successfully")
 
 
 run()
