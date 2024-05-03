@@ -27,9 +27,9 @@ lint = "flake8 ."
 fmt = "black ."
 fmt-check = "black --check ."
 typecheck = "mypy ."
-test = "pytest -v ./tests"
-test-dev = "pytest ./tests -v -m dev"
-test-cov = "pytest ./tests -v --cov=gsp"
+test = "pytest -v -s ./tests --log-cli-level=INFO"
+test-dev = "pytest ./tests -v -s -m dev  --log-cli-level=INFO"
+test-cov = "pytest ./tests -v -s --cov=gsp --log-cli-level=INFO"
 
 [tool.flake8]
 max-complexity = 10
