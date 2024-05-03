@@ -7,7 +7,6 @@
 		{ "company_name": "Nvidia", "stock_id": "NVDA" }
 	],
 	"gaming": [
-		{ "company_name": "Activision Blizzard", "stock_id": "AIY.DE" },
 		{ "company_name": "Electronic Arts", "stock_id": "EA" },
 		{ "company_name": "Take-Two Interactive", "stock_id": "TTWO" },
 		{ "company_name": "Nintendo", "stock_id": "NTDOY" },
