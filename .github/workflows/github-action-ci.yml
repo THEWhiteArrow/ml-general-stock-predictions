@@ -38,9 +38,6 @@ jobs:
             - name: Run type checking
               run: make typecheck
 
-            - name: Run scraper
-              run: make scrape
-
             - name: Run coverage
               run: make test-coverage
 
