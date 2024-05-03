@@ -34,6 +34,7 @@ def gather_stocks_data():
             )
             df["Area"] = area
             df["Name"] = stock_company["stock_id"]
+            df["ExistsSince"] = df["Date"].min()
 
             stock_data_df = pd.concat([stock_data_df, df], axis=0)
 
@@ -63,8 +64,8 @@ def run():
 
     The code snippet is a part of the run.py file that is located in the nsp/scraper directory.
     """
-    gather_stocks_data()
     gather_traded_stocks_list()
+    gather_stocks_data()
 
 
 if __name__ == "__main__":

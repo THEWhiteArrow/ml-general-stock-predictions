@@ -18,3 +18,4 @@
     -   this way the model will be able to focus less on the raw prices but more on real life stocks trading behaviours
 
 -   the model should include relevant sentimenatl events into predictions
+- notify which stocks do no make sense to include in the model (number of NaN is too high)

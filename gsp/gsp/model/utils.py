@@ -151,3 +151,58 @@ def show(*args):
         display(*args)
     except ImportError:
         print(*args)
+
+
+def get_all_missing_stock_names(stocks: pd.DataFrame) -> List[str]:
+    """A function that returns the list of stocks that have missing values in the given DataFrame.
+
+    Args:
+        stocks (pd.DataFrame): Stocks hitorical data
+
+    Returns:
+        List[str]: List of stocks that have missing values
+    """
+    return (
+        stocks.copy()
+        .unstack("Name")
+        .ffill()
+        .isna()
+        .stack("Name", future_stack=True)  # type: ignore
+        .any(axis=1)
+        .rename("IsMissing")
+        .to_frame()[["IsMissing"]]["IsMissing"]
+        .unstack("Name")
+        .sum()
+        .to_frame("MissingCount")
+        .where(lambda x: x > 1)
+        .dropna()
+        .T.columns.to_list()
+    )  # type: ignore
+
+
+def get_minimal_stocks_existence_date(stocks: pd.DataFrame) -> datetime.date:
+    """A function that returns the minimal starting date for all stocks in the given DataFrame.
+
+    Args:
+        stocks (pd.DataFrame): Stocks hitorical data
+
+    Returns:
+        datetime.date: Minimal starting date for all stocks
+    """
+    return (
+        stocks.copy()
+        .ffill()
+        .isna()
+        .stack("Name", future_stack=True)  # type: ignore
+        .any(axis=1)
+        .reset_index("Name", drop=True)
+        .groupby("Date")
+        .any()
+        .rename("AnyStockMissing")
+        .to_frame()
+        .where(lambda x: x.eq(False))
+        .dropna()
+        .index.min()
+        .to_timestamp()
+        .date()
+    )  # type: ignore

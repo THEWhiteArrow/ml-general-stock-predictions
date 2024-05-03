@@ -31,7 +31,6 @@
 		{ "company_name": "Lyft", "stock_id": "LYFT" },
 		{ "company_name": "DoorDash", "stock_id": "DASH" },
 		{ "company_name": "Palantir Technologies", "stock_id": "PLTR" },
-		{ "company_name": "Robinhood", "stock_id": "HOOD" },
 		{ "company_name": "Airbnb", "stock_id": "ABNB" }
 	],
 	"space_exploration": [
@@ -57,7 +56,6 @@
 		{ "company_name": "CRISPR Therapeutics", "stock_id": "CRSP" }
 	],
 	"prostesis": [
-		{ "company_name": "Össur", "stock_id": "SSURW.FGI" },
 		{ "company_name": "Intuitive Surgical", "stock_id": "ISRG" },
 		{ "company_name": "Stryker", "stock_id": "SYK" },
 		{ "company_name": "Zimmer Biomet", "stock_id": "ZBH" },

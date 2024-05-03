@@ -35,6 +35,7 @@ def test_scraper_task_downloads_and_save_traded_stocks_list():
         pytest.fail("Path to scraped traded stocks list file is incorrect : " + SCRAPED_TRADED_STOCK_LIST_FILE_PATH)
 
 
+@pytest.mark.skip(reason="There are companies that are not traded on NASDAQ but list is only for NASDAQ.")
 def test_setup_stocks_json_is_valid():
     """Tests if the setup stocks json file is valid (has the exisiting publicly traded companies)."""
 
