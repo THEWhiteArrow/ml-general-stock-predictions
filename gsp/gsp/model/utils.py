@@ -153,31 +153,29 @@ def show(*args):
         print(*args)
 
 
-def get_all_missing_stock_names(stocks: pd.DataFrame) -> List[str]:
+def get_all_missing_stock_names(stocks: pd.DataFrame, starting_date: datetime.date) -> List[str]:
     """A function that returns the list of stocks that have missing values in the given DataFrame.
 
     Args:
         stocks (pd.DataFrame): Stocks hitorical data
+        starting_date (datetime.date): The starting date to check for missing values
 
     Returns:
         List[str]: List of stocks that have missing values
     """
-    return (
+    return cast(
+        List[str],
         stocks.copy()
+        .set_index(["Date", "Name"])
         .unstack("Name")
         .ffill()
-        .isna()
         .stack("Name", future_stack=True)  # type: ignore
-        .any(axis=1)
-        .rename("IsMissing")
-        .to_frame()[["IsMissing"]]["IsMissing"]
-        .unstack("Name")
-        .sum()
-        .to_frame("MissingCount")
-        .where(lambda x: x > 1)
-        .dropna()
-        .T.columns.to_list()
-    )  # type: ignore
+        .reset_index("Name")
+        .loc[starting_date.isoformat() :]
+        .groupby("Date", group_keys=False)
+        .apply(lambda r: r["Name"][r.isna().any(axis=1)].to_list())
+        .iloc[0],
+    )
 
 
 def get_minimal_stocks_existence_date(stocks: pd.DataFrame) -> datetime.date:
@@ -189,20 +187,4 @@ def get_minimal_stocks_existence_date(stocks: pd.DataFrame) -> datetime.date:
     Returns:
         datetime.date: Minimal starting date for all stocks
     """
-    return (
-        stocks.copy()
-        .ffill()
-        .isna()
-        .stack("Name", future_stack=True)  # type: ignore
-        .any(axis=1)
-        .reset_index("Name", drop=True)
-        .groupby("Date")
-        .any()
-        .rename("AnyStockMissing")
-        .to_frame()
-        .where(lambda x: x.eq(False))
-        .dropna()
-        .index.min()
-        .to_timestamp()
-        .date()
-    )  # type: ignore
+    return stocks.copy()[["Date"]].reset_index().groupby("Date").count().idxmax().iloc[0].to_timestamp().date()
