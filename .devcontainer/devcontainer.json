@@ -13,7 +13,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": [],
+	"postCreateCommand": "bash scripts/install.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {

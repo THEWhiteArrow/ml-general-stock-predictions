@@ -114,8 +114,9 @@ def get_most_recent_working_date(date: datetime.date = datetime.date.today()) ->
 
 
 def get_nth_previous_working_date(n: int, date: datetime.date = datetime.date.today()) -> datetime.date:
-    """A function that returns the nth previous working date from the given date.
-
+    """
+    TODO: needs to include the leap years
+    A function that returns the nth previous working date from the given date.
     Args:
         n (int): number of working days to go back
         today (datetime.date, optional): day from which the working days should be substracted. Defaults to datetime.date.today().
@@ -187,4 +188,8 @@ def get_minimal_stocks_existence_date(stocks: pd.DataFrame) -> datetime.date:
     Returns:
         datetime.date: Minimal starting date for all stocks
     """
-    return stocks.copy()[["Date"]].reset_index().groupby("Date").count().idxmax().iloc[0].to_timestamp().date()
+    return (
+        cast(pd.Period, stocks.copy()[["Date"]].reset_index().groupby("Date").count().idxmax().iloc[0])
+        .to_timestamp()
+        .date()
+    )
