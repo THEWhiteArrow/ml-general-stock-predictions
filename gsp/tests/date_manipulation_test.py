@@ -1,4 +1,5 @@
 import datetime
+import pytest
 from gsp.model.utils import get_nth_previous_working_date, get_most_recent_working_date
 
 
@@ -79,3 +80,20 @@ def test_date_to_isoformat_will_provide_prefix_zeros():
 
     # --- ASSERT ---
     assert date.isoformat() == "2024-05-02"
+
+
+@pytest.mark.dev
+@pytest.mark.parametrize(
+    "date_iso, step, expected_iso",
+    [
+        ("2024-02-20", -10, "2024-03-05"),
+        ("2024-03-05", 10, "2024-02-20"),
+    ],
+)
+def test_get_nth_previous_working_date_with_leap_years(date_iso: str, step: int, expected_iso: str):
+    # --- SETUP ---
+    date = datetime.datetime.fromisoformat(date_iso).date()
+    expected = datetime.datetime.fromisoformat(expected_iso).date()
+
+    # --- ASSERT ---
+    assert get_nth_previous_working_date(step, date) == expected

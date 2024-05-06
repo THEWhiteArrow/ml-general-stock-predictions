@@ -1,3 +1,7 @@
+# TODO:
+
+-   add moving averages to the model_v2
+
 # NOTES AND OBSERVATIONS
 
 -   the model is to be trained on the stocks historical data that includes main features such as:
@@ -18,4 +22,4 @@
     -   this way the model will be able to focus less on the raw prices but more on real life stocks trading behaviours
 
 -   the model should include relevant sentimenatl events into predictions
-- notify which stocks do no make sense to include in the model (number of NaN is too high)
+-   notify which stocks do no make sense to include in the model (number of NaN is too high)

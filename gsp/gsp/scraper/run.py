@@ -34,7 +34,6 @@ def gather_stocks_data():
             )
             df["Area"] = area
             df["Name"] = stock_company["stock_id"]
-            df["ExistsSince"] = df["Date"].min()
 
             stock_data_df = pd.concat([stock_data_df, df], axis=0)
 
