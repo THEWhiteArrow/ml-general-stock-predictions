@@ -1,9 +1,47 @@
-from typing import List, Literal, TypeAlias, cast
+from dataclasses import dataclass
+from typing import Any, List, Literal, Tuple, TypeAlias, cast
 import datetime
 import pandas as pd
+from sklearn.compose import ColumnTransformer
+
+MOVING_WINDOW_AGGREGATORS_ALIAS: TypeAlias = Literal["mean", "sum", "median", "std", "var", "min", "max"]
 
 
-MOVING_WINDOW_AGGREGATORS_ALIAS: TypeAlias = Literal["mean", "sum", "median", "std", "var"]
+def make_shift_in_groups(
+    df: pd.DataFrame,
+    groupby: List[str] = [],
+    column: str = "",
+    shift: List[int] | int = 1,
+    name: str | None = None,
+) -> pd.DataFrame:
+    df = df.copy(deep=True)
+    if name is None:
+        name = column
+
+    if isinstance(shift, int):
+        shift = [shift]
+
+    shift = list(filter(lambda el: el != 0, shift))
+
+    if len(shift) == 0:
+        raise ValueError("Shift value must be non-zero!")
+
+    def create_shifted_columns(group):
+        shifted_group = pd.DataFrame(index=group.index)
+        for val in shift:
+
+            shifted_group[f"{name}_{'lead' if val < 0 else 'lag'}_{abs(val)}"] = group[column].shift(val)
+
+        return shifted_group
+
+    shifted_df = cast(
+        pd.DataFrame,
+        df.groupby(groupby, observed=True, group_keys=False)
+        .apply(create_shifted_columns, include_groups=False)
+        .sort_index(),
+    )
+
+    return shifted_df
 
 
 def make_mw_in_groups(
@@ -56,53 +94,10 @@ def make_mw_in_groups(
 
     return cast(
         pd.DataFrame,
-        df.reset_index(groupby)
-        .groupby(groupby, observed=True)
+        df.groupby(groupby, observed=True, group_keys=False)
         .apply(create_mw_columns, include_groups=False)
-        .reset_index(groupby)
-        .set_index(groupby, append=True)
         .sort_index(),
     )
-
-
-def make_shift_in_groups(
-    df: pd.DataFrame,
-    groupby: List[str] = [],
-    column: str = "",
-    shift: List[int] | int = 1,
-    name: str | None = None,
-) -> pd.DataFrame:
-    df = df.copy(deep=True)
-    if name is None:
-        name = column
-
-    if isinstance(shift, int):
-        shift = [shift]
-
-    shift = list(filter(lambda el: el != 0, shift))
-
-    if len(shift) == 0:
-        raise ValueError("Shift value must be non-zero!")
-
-    def create_shifted_columns(group):
-        shifted_group = pd.DataFrame(index=group.index)
-        for val in shift:
-
-            shifted_group[f"{name}_{'lead' if val < 0 else 'lag'}_{abs(val)}"] = group[column].shift(val)
-
-        return shifted_group
-
-    shifted_df = cast(
-        pd.DataFrame,
-        df.reset_index(groupby)
-        .groupby(groupby, observed=True)
-        .apply(create_shifted_columns, include_groups=False)
-        .reset_index(groupby)
-        .set_index(groupby, append=True)
-        .sort_index(),
-    )
-
-    return shifted_df
 
 
 def get_most_recent_working_date(date: datetime.date = datetime.date.today()) -> datetime.date:
@@ -193,3 +188,18 @@ def get_minimal_stocks_existence_date(stocks: pd.DataFrame) -> datetime.date:
         .to_timestamp()
         .date()
     )
+
+
+@dataclass
+class ColumnTransformerWrapper:
+    transformers: List[Tuple[str, Any, List[str]]]
+    remainder: Literal["drop", "passthrough"] = "passthrough"
+
+    def fit_transform(self, X: pd.DataFrame, y: Any | None = None) -> pd.DataFrame:  # type: ignore
+        ct = ColumnTransformer(self.transformers, remainder=self.remainder)
+
+        return pd.DataFrame(
+            ct.fit_transform(X, y),  # type: ignore
+            index=X.index,
+            columns=[col.replace("remainder__", "") for col in ct.get_feature_names_out()],
+        )
