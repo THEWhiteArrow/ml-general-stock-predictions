@@ -1,4 +1,6 @@
 data/scraped/*.csv
+data/output/*.csv
+
 *.log
 .pytest_cache
 .coverage

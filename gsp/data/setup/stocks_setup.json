@@ -1,6 +1,9 @@
 {
 	"AI": [
 		{ "company_name": "Google", "stock_id": "GOOGL" },
-		{ "company_name": "Microsoft", "stock_id": "MSFT" }
+		{ "company_name": "Microsoft", "stock_id": "MSFT" },
+		{ "company_name": "IBM", "stock_id": "IBM" },
+		{ "company_name": "Amazon", "stock_id": "AMZN" },
+		{ "company_name": "Nvidia", "stock_id": "NVDA" }
 	]
 }
