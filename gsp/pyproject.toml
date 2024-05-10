@@ -24,6 +24,7 @@ xgboost = "^2.0.3"
 lightgbm = "^4.3.0"
 optuna = "^3.6.1"
 scikit-learn = "^1.4.2"
+jupyter = "^1.0.0"
 
 [tool.poe.tasks]
 scrape = "python -m gsp.scraper.run"
