@@ -10,7 +10,7 @@ python = "^3.12"
 poethepoet = "^0.26.0"
 flake8-pyproject = "^1.2.3"
 requests = "^2.31.0"
-black = "^24.4.2"
+black = {extras = ["jupyter"], version = "^24.4.2"}
 flake8 = "^7.0.0"
 mypy = "^1.10.0"
 pandas = "^2.2.2"
@@ -44,7 +44,7 @@ markers = [
 
 [tool.flake8]
 max-complexity = 10
-ignore = "E501,W503,W504"
+ignore = "E501,W503,W504,E203,W391"
 
 [tool.black]
 line-length = 120

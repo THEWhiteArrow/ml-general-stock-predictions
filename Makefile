@@ -33,3 +33,7 @@ test-dev:
 test-coverage:
 	@echo "Testing with coverage..."
 	cd gsp && poetry run poe test-cov
+
+convert-notebooks:
+	@echo "Converting notebooks..."
+	cd gsp && poetry run poe convert-notebooks
