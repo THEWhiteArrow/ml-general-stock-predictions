@@ -14,8 +14,11 @@ OUTPUT_DIR_PATH: str = os.path.join(os.path.abspath(os.path.dirname(__file__)), 
 
 
 def save_output(df: pd.DataFrame, file_name: str) -> None:
-    df.to_csv(os.path.join(OUTPUT_DIR_PATH, file_name), index=False)
+    df.to_csv(os.path.join(OUTPUT_DIR_PATH, file_name), index=True)
 
 
 def load_output(file_name: str) -> pd.DataFrame:
-    return pd.read_csv(os.path.join(OUTPUT_DIR_PATH, file_name))
+    try:
+        return pd.read_csv(os.path.join(OUTPUT_DIR_PATH, file_name))
+    except FileNotFoundError:
+        return pd.DataFrame()
