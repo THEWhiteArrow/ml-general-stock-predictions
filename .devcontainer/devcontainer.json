@@ -43,7 +43,8 @@
 				"ms-vscode.makefile-tools",
 				"njpwerner.autodocstring",
 				"github.vscode-github-actions",
-				"wakatime.vscode-wakatime"
+				"wakatime.vscode-wakatime",
+				"vscode-icons-team.vscode-icons"
 			]
 		}
 	},

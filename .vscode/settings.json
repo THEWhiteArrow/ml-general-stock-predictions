@@ -1,4 +1,8 @@
 {
 	"python.analysis.typeCheckingMode": "standard",
 	"python.analysis.diagnosticMode": "workspace"
+	// To force the extension to run in the UI process, uncomment the following line
+	// "remote.extensionKind": {
+	// 	"GitHub.copilot": ["ui"]
+	// }
 }
