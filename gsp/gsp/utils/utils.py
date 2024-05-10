@@ -167,7 +167,7 @@ def get_all_missing_stock_names(stocks: pd.DataFrame, starting_date: datetime.da
         .ffill()
         .stack("Name", future_stack=True)  # type: ignore
         .reset_index("Name")
-        .loc[starting_date.isoformat() :]
+        .loc[starting_date.isoformat() :]  # type: ignore
         .groupby("Date", group_keys=False)
         .apply(lambda r: r["Name"][r.isna().any(axis=1)].to_list())
         .iloc[0],
