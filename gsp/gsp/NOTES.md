@@ -1,6 +1,6 @@
 # TODO:
 
--   add moving averages to the model_v2
+-
 
 # NOTES AND OBSERVATIONS
 
@@ -12,6 +12,7 @@
 
 -   the model is to predict the prices of the stocks
 -   the data for the model should be pulled at the end of trading day so that todays data can be used - **IMPORTANT**
+-   the hyperparameters may cause the model to over generalise data and minimise the loss function by predicting straight line - **IMPORTANT**
 
 # PROJECT FUTURE
 

@@ -5,5 +5,67 @@
 		{ "company_name": "IBM", "stock_id": "IBM" },
 		{ "company_name": "Amazon", "stock_id": "AMZN" },
 		{ "company_name": "Nvidia", "stock_id": "NVDA" }
+	],
+	"gaming": [
+		{ "company_name": "Electronic Arts", "stock_id": "EA" },
+		{ "company_name": "Take-Two Interactive", "stock_id": "TTWO" },
+		{ "company_name": "Nintendo", "stock_id": "NTDOY" },
+		{ "company_name": "Sony", "stock_id": "SONY" }
+	],
+	"software": [
+		{ "company_name": "Oracle", "stock_id": "ORCL" },
+		{ "company_name": "Adobe", "stock_id": "ADBE" },
+		{ "company_name": "Salesforce", "stock_id": "CRM" },
+		{ "company_name": "SAP", "stock_id": "SAP" },
+		{ "company_name": "Intuit", "stock_id": "INTU" }
+	],
+	"hardware": [
+		{ "company_name": "Apple", "stock_id": "AAPL" },
+		{ "company_name": "Samsung", "stock_id": "005930.KS" },
+		{ "company_name": "Intel", "stock_id": "INTC" },
+		{ "company_name": "HP", "stock_id": "HPQ" },
+		{ "company_name": "Dell", "stock_id": "DELL" }
+	],
+	"startups": [
+		{ "company_name": "Uber", "stock_id": "UBER" },
+		{ "company_name": "Lyft", "stock_id": "LYFT" },
+		{ "company_name": "DoorDash", "stock_id": "DASH" },
+		{ "company_name": "Palantir Technologies", "stock_id": "PLTR" },
+		{ "company_name": "Airbnb", "stock_id": "ABNB" }
+	],
+	"space_exploration": [
+		{ "company_name": "Boeing", "stock_id": "BA" },
+		{ "company_name": "Lockheed Martin", "stock_id": "LMT" },
+		{ "company_name": "Northrop Grumman", "stock_id": "NOC" },
+		{ "company_name": "Blue Origin", "stock_id": "BLUE" },
+		{ "company_name": "Virgin Galactic", "stock_id": "SPCE" }
+	],
+	"sustainability": [
+		{ "company_name": "Tesla", "stock_id": "TSLA" },
+		{ "company_name": "NextEra Energy", "stock_id": "NEE" },
+		{ "company_name": "Vestas Wind Systems", "stock_id": "VWS.CO" },
+		{ "company_name": "First Solar", "stock_id": "FSLR" },
+		{ "company_name": "Enphase Energy", "stock_id": "ENPH" },
+		{ "company_name": "Relativity Space", "stock_id": "RS" }
+	],
+	"biotech": [
+		{ "company_name": "Moderna", "stock_id": "MRNA" },
+		{ "company_name": "Regeneron Pharmaceuticals", "stock_id": "REGN" },
+		{ "company_name": "Vertex Pharmaceuticals", "stock_id": "VRTX" },
+		{ "company_name": "Gilead Sciences", "stock_id": "GILD" },
+		{ "company_name": "CRISPR Therapeutics", "stock_id": "CRSP" }
+	],
+	"prostesis": [
+		{ "company_name": "Intuitive Surgical", "stock_id": "ISRG" },
+		{ "company_name": "Stryker", "stock_id": "SYK" },
+		{ "company_name": "Zimmer Biomet", "stock_id": "ZBH" },
+		{ "company_name": "Smith & Nephew", "stock_id": "SN.L" }
+	],
+	"healthcare": [
+		{ "company_name": "Johnson & Johnson", "stock_id": "JNJ" },
+		{ "company_name": "Pfizer", "stock_id": "PFE" },
+		{ "company_name": "Merck", "stock_id": "MRK" },
+		{ "company_name": "UnitedHealth Group", "stock_id": "UNH" },
+		{ "company_name": "Abbott Laboratories", "stock_id": "ABT" }
 	]
 }
