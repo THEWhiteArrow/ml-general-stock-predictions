@@ -34,6 +34,6 @@ test-coverage:
 	@echo "Testing with coverage..."
 	cd gsp && poetry run poe test-cov
 
-convert-notebooks:
+convert:
 	@echo "Converting notebooks..."
-	cd gsp && poetry run poe convert-notebooks
+	cd gsp && poetry run poe convert

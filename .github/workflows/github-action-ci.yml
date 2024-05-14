@@ -30,7 +30,7 @@ jobs:
               run: make install
 
             - name: Convert Jupyter notebooks to Python scripts
-              run: make convert-notebooks
+              run: make convert
 
             - name: Run formatting check
               run: make fmt-check
