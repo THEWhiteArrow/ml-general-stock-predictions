@@ -1,5 +1,8 @@
 # GENERAL STOCK PREDICTIONS
 
+[![Tests](https://github.com/SEP4Y-S24/iot/actions/workflows/build.yaml/badge.svg)](https://github.com/SEP4Y-S24/iot/actions/workflows/build.yaml)
+![GitHub Latest Release)](https://img.shields.io/github/v/release/SEP4Y-S24/iot?logo=github)
+
 ## Introduction
 
 This project aims to forecast the stock prices of multiple companies using a machine learning model. The dataset used in this project is obtained from Yahoo Finance.
