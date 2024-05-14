@@ -1,7 +1,7 @@
 # GENERAL STOCK PREDICTIONS
 
-[![Tests](https://github.com/SEP4Y-S24/iot/actions/workflows/build.yaml/badge.svg)](https://github.com/SEP4Y-S24/iot/actions/workflows/build.yaml)
-![GitHub Latest Release)](https://img.shields.io/github/v/release/SEP4Y-S24/iot?logo=github)
+[![CI](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-ci.yml/badge.svg)](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-ci.yml/badge.svg)
+![GitHub Latest Release)](https://img.shields.io/github/v/release/THEWhiteArrow/ml-general-stock-predictions?logo=github)
 
 ## Introduction
 
