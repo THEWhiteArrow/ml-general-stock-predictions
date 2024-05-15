@@ -1,0 +1,61 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - "*"
+
+jobs:
+    release:
+        if: contains(github.event.head_commit.message, '#major') || contains(github.event.head_commit.message, '#minor') || contains(github.event.head_commit.message, '#patch')
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Python 3.12
+              uses: actions/setup-python@v5
+              with:
+                  python-version: 3.12
+
+            - name: Set up Poetry
+              run: |
+                  pip install poetry
+                  poetry --version
+
+            - name: Install dependencies
+              run: make install
+
+            - name: Convert Jupyter notebooks to Python scripts
+              run: make convert
+
+            - name: Run formatting check
+              run: make fmt-check
+
+            - name: Run linting
+              run: make lint
+
+            - name: Run type checking
+              run: make typecheck
+
+            - name: Run coverage
+              run: make test-coverage
+
+            - name: Bump version
+              id: version_bump
+              uses: anothrNick/github-tag-action@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  WITH_V: true
+                  DEFAULT_BUMP: patch
+
+            - name: Create Release
+              uses: ncipollo/release-action@v1.14.0
+              with:
+                  artifacts: gsp/.coverage
+                  tag: ${{ steps.version_bump.outputs.new_tag }}
+                  generateReleaseNotes: true
