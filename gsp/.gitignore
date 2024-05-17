@@ -1,4 +1,8 @@
 data/scraped/*.csv
+data/output/*.csv
+!data/output/test_history_log.csv
+gsp/model/*.py
+
 *.log
 .pytest_cache
 .coverage

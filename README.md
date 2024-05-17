@@ -1,5 +1,8 @@
 # GENERAL STOCK PREDICTIONS
 
+[![CI](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-ci.yml/badge.svg)](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-ci.yml/badge.svg)
+![GitHub Latest Release)](https://img.shields.io/github/v/release/THEWhiteArrow/ml-general-stock-predictions?logo=github)
+
 ## Introduction
 
 This project aims to forecast the stock prices of multiple companies using a machine learning model. The dataset used in this project is obtained from Yahoo Finance.

@@ -13,7 +13,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": [],
+	"postCreateCommand": "bash scripts/install.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -42,7 +42,9 @@
 				"ms-python.black-formatter",
 				"ms-vscode.makefile-tools",
 				"njpwerner.autodocstring",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"wakatime.vscode-wakatime",
+				"vscode-icons-team.vscode-icons"
 			]
 		}
 	},

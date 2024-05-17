@@ -1,0 +1,3 @@
+Version,Created_Date,Prediction_Date,RMSLE,HyperParams,CategoricalFeatures,LabelFeatures,NSteps,Shift_list,MWM_list,Phase,DaysBackToConsider,SingleProblemApproach
+1,2024-05-14,2024-04-11,0.2783188238224955,{},"['DayOfWeek', 'AreaCat']",['Year'],21,"[1, 2, 3]","[5, 10, 15]",1,1260,False
+2,2024-05-14,2024-04-11,0.09648950225870703,{},"['DayOfWeek', 'AreaCat']",['Year'],21,"[1, 2, 3]","[5, 10, 15]",1,1260,True

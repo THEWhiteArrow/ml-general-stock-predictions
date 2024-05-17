@@ -26,6 +26,14 @@ test:
 	@echo "Testing..."
 	cd gsp && poetry run poe test
 
+test-dev:
+	@echo "Testing marker 'dev'..."
+	cd gsp && poetry run poe test-dev
+
 test-coverage:
 	@echo "Testing with coverage..."
 	cd gsp && poetry run poe test-cov
+
+convert:
+	@echo "Converting notebooks..."
+	cd gsp && poetry run poe convert
