@@ -1,7 +1,5 @@
 # TODO:
 
--
-
 # NOTES AND OBSERVATIONS
 
 -   the model is to be trained on the stocks historical data that includes main features such as:
