@@ -103,14 +103,6 @@ def make_mw_in_groups(
     )
 
 
-def get_most_recent_working_date(date: datetime.date = datetime.date.today()) -> datetime.date:
-    if date.weekday() == 5:
-        return date - datetime.timedelta(days=1)
-    elif date.weekday() == 6:
-        return date - datetime.timedelta(days=2)
-    return date
-
-
 def get_nth_previous_working_date(n: int, date: datetime.date = datetime.date.today()) -> datetime.date:
     """
     TODO: needs to include the leap years

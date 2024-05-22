@@ -1,11 +1,12 @@
+import datetime
 import os
 from dotenv import load_dotenv
-import pandas as pd
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
 from lib.logger.setup import setup_logger
-import datetime
+from gsp.utils.model_utils import get_nth_previous_working_date
+from data import load_output
 
 logger = setup_logger()
 
@@ -100,12 +101,16 @@ def run():
     predictions_collection = setup_collection(database, "predictions")
 
     logger.info("Loading dataframes...")
-    prediction_df = load_prediction_df()
+    prediction_date = get_nth_previous_working_date(n=0, date=datetime.date.today())
+    generation_df = load_output(f"generation_{prediction_date.isoformat()}.csv")
+    prediction_df = load_output(f"prediction_{prediction_date.isoformat()}.csv")
 
-    logger.info("Transforming dataframes into mongodb documents...")
-    # generations_doc, predictions_doc = transform_dataframes_to_documents()
+    # logger.info("Transforming dataframes into mongodb documents...")
+    # generations_doc = generation_df.to_dict(orient="records")
+    # predictions_doc = prediction_df.to_dict(orient="records")
 
-    logger.info("Inserting documents into MongoDB collections...")
+    # logger.info("Inserting documents into MongoDB collections...")
+    # generation should have a list of references to predictions
     # generations_collection.insert_many(generations_doc)
     # predictions_collection.insert_many(predictions_doc)
 
