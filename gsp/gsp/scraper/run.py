@@ -1,7 +1,8 @@
+import io
 import json
 import pandas as pd
-import io
-import logging
+from lib.logger.setup import setup_logger
+
 from gsp.scraper.download import download_stocks_history_from_yahoo_api, download_traded_stocks_list_from_nasdaq_api
 from data import (
     SCRAPED_TRADED_STOCK_LIST_FILE_PATH,
@@ -10,7 +11,7 @@ from data import (
     SCRAPED_STOCK_FILE_PATH,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 
 def gather_stocks_data():

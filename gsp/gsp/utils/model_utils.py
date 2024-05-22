@@ -1,8 +1,11 @@
 from dataclasses import dataclass
 from typing import Any, List, Literal, Tuple, TypeAlias, cast
 import datetime
+from lib.logger.setup import setup_logger
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+
+logger = setup_logger()
 
 MOVING_WINDOW_AGGREGATORS_ALIAS: TypeAlias = Literal["mean", "sum", "median", "std", "var", "min", "max"]
 
@@ -146,7 +149,7 @@ def show(*args):
 
         display(*args)
     except ImportError:
-        print(*args)
+        logger.info(*args)
 
 
 def get_all_missing_stock_names(stocks: pd.DataFrame, starting_date: datetime.date) -> List[str]:

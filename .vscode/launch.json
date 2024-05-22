@@ -5,7 +5,13 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python Debugger: Scraper",
+			"name": "Python: MongoDB",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/gsp/gsp/mongodb/run.py"
+		},
+		{
+			"name": "Python: Scraper",
 			"type": "debugpy",
 			"request": "launch",
 			"program": "${workspaceFolder}/gsp/gsp/scraper/run.py"

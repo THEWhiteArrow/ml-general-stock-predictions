@@ -37,3 +37,11 @@ test-coverage:
 convert:
 	@echo "Converting notebooks..."
 	cd gsp && poetry run poe convert
+
+serve:
+	@echo "Training and predicting model..."
+	# cd gsp && poetry run poe serve
+
+publish:
+	@echo "Publishing results..."
+	# cd gsp && poetry run poe publish

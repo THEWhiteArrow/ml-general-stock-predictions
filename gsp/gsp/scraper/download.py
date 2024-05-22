@@ -1,9 +1,9 @@
 from typing import Dict
 import requests
 import datetime
-import logging
+from lib.logger.setup import setup_logger
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 
 def download_stocks_history_from_yahoo_api(

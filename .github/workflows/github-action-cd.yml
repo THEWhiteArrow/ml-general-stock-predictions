@@ -1,0 +1,38 @@
+name: CD
+
+on:
+    schedule:
+        - cron: "0 17 * * 1-5"
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Python 3.12
+              uses: actions/setup-python@v5
+              with:
+                  python-version: 3.12
+
+            - name: Set up Poetry
+              run: |
+                  pip install poetry
+                  poetry --version
+
+            - name: Install dependencies
+              run: make install
+
+            - name: Convert Jupyter notebooks to Python scripts
+              run: make convert
+
+            - name: Scrape data
+              run: make scrape
+
+            - name: Serve model
+              run: make serve
+
+            - name: Publish results
+              run: make publish

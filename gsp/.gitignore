@@ -6,3 +6,4 @@ gsp/model/*.py
 *.log
 .pytest_cache
 .coverage
+.env

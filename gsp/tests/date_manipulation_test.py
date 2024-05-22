@@ -1,6 +1,6 @@
 import datetime
 import pytest
-from gsp.utils.utils import get_nth_previous_working_date, get_most_recent_working_date
+from gsp.utils.model_utils import get_nth_previous_working_date, get_most_recent_working_date
 
 
 def test_get_the_most_recent_working_date_returns_correct_values_for_all_weekdays():
