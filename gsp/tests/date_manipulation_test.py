@@ -1,6 +1,6 @@
 import datetime
 import pytest
-from gsp.utils.model_utils import get_nth_previous_working_date
+from gsp.utils.date_utils import get_nth_previous_working_date
 
 
 def test_get_nth_previous_working_date_correctly_returns_within_the_same_week():
