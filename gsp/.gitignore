@@ -1,5 +1,6 @@
 data/scraped/*.csv
 data/output/*.csv
+data/output/*.png
 !data/output/test_history_log.csv
 gsp/model/*.py
 

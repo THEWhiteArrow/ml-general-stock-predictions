@@ -5,6 +5,12 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Python: GSP Pipeline",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/gsp/gsp/run.py"
+		},
+		{
 			"name": "Python: MongoDB",
 			"type": "debugpy",
 			"request": "launch",

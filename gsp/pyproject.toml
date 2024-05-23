@@ -25,8 +25,8 @@ lightgbm = "^4.3.0"
 optuna = "^3.6.1"
 scikit-learn = "^1.4.2"
 jupyter = "^1.0.0"
-pymongo = "^4.7.2"
 python-dotenv = "^1.0.1"
+mongoengine = "^0.28.2"
 
 [tool.poe.tasks]
 scrape = "python -m gsp.scraper.scraper"

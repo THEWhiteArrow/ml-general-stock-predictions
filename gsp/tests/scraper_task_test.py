@@ -2,7 +2,7 @@ import json
 import os
 import pandas as pd
 import pytest
-from gsp.scraper.scraper import gather_stocks_data, gather_traded_stocks_list
+from gsp.scraper.run import gather_stocks_data, gather_traded_stocks_list
 from data import SCRAPED_STOCK_FILE_PATH, SCRAPED_TRADED_STOCK_LIST_FILE_PATH, SETUP_STOCK_FILE_PATH, SETUP_STOCK_ALIAS
 import logging
 

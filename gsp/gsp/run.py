@@ -1,7 +1,7 @@
 from lib.logger.setup import setup_logger
-from gsp.scraper.scraper import scrape
+from gsp.scraper.run import scrape
 from gsp.model.model import generate_prediction
-from gsp.mongodb.mongodb import publish
+from gsp.mongodb.run import publish
 
 logger = setup_logger(__name__)
 
