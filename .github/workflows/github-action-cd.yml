@@ -28,11 +28,5 @@ jobs:
             - name: Convert Jupyter notebooks to Python scripts
               run: make convert
 
-            - name: Scrape data
-              run: make scrape
-
-            - name: Serve model
-              run: make serve
-
-            - name: Publish results
-              run: make publish
+            - name: Run pipeline
+              run: make pipeline
