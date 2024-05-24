@@ -25,9 +25,11 @@ lightgbm = "^4.3.0"
 optuna = "^3.6.1"
 scikit-learn = "^1.4.2"
 jupyter = "^1.0.0"
+python-dotenv = "^1.0.1"
+mongoengine = "^0.28.2"
 
 [tool.poe.tasks]
-scrape = "python -m gsp.scraper.run"
+scrape = "python -m gsp.scraper.scraper"
 lint = "flake8 ."
 fmt = "black ."
 fmt-check = "black --check ."
@@ -35,7 +37,8 @@ typecheck = "mypy ."
 convert = "find . -name '*.ipynb' -exec jupyter nbconvert --to python {} \\;"
 test = "pytest -v -s ./tests --log-cli-level=INFO"
 test-dev = "pytest ./tests -v -s -m dev  --log-cli-level=INFO"
-test-cov = "pytest ./tests -v -s --cov=gsp --log-cli-level=INFO"
+test-cov = "pytest tests -v -s --cov=gsp --log-cli-level=INFO"
+pipeline = "python -m gsp.run"
 
 [tool.pytest.ini_options]
 markers = [

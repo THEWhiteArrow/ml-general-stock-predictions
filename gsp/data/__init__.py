@@ -17,8 +17,8 @@ def save_output(df: pd.DataFrame, file_name: str) -> None:
     df.to_csv(os.path.join(OUTPUT_DIR_PATH, file_name), index=True)
 
 
-def load_output(file_name: str) -> pd.DataFrame:
+def load_output(file_name: str, dtypes: Dict | None = None, parse_dates: List[str] = []) -> pd.DataFrame:
     try:
-        return pd.read_csv(os.path.join(OUTPUT_DIR_PATH, file_name))
+        return pd.read_csv(os.path.join(OUTPUT_DIR_PATH, file_name), dtype=dtypes or {}, parse_dates=parse_dates)
     except FileNotFoundError:
         return pd.DataFrame()

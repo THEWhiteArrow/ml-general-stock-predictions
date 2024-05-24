@@ -5,7 +5,30 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python Debugger: Scraper",
+			"name": "Pytest: Mark Dev",
+			"type": "debugpy",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/gsp",
+			"python": "${command:python.interpreterPath}",
+			"module": "pytest",
+			"console": "internalConsole",
+			"justMyCode": true,
+			"args": ["--disable-warnings", "-s", "-v", "-m", "dev", "./tests"]
+		},
+		{
+			"name": "Python: GSP Pipeline",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/gsp/gsp/run.py"
+		},
+		{
+			"name": "Python: MongoDB",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/gsp/gsp/mongodb/run.py"
+		},
+		{
+			"name": "Python: Scraper",
 			"type": "debugpy",
 			"request": "launch",
 			"program": "${workspaceFolder}/gsp/gsp/scraper/run.py"

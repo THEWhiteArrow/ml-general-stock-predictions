@@ -44,7 +44,8 @@
 				"njpwerner.autodocstring",
 				"github.vscode-github-actions",
 				"wakatime.vscode-wakatime",
-				"vscode-icons-team.vscode-icons"
+				"vscode-icons-team.vscode-icons",
+				"hediet.vscode-drawio"
 			]
 		}
 	},

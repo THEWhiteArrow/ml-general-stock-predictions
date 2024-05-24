@@ -1,7 +1,7 @@
+import io
 import json
 import pandas as pd
-import io
-import logging
+from lib.logger.setup import setup_logger
 from gsp.scraper.download import download_stocks_history_from_yahoo_api, download_traded_stocks_list_from_nasdaq_api
 from data import (
     SCRAPED_TRADED_STOCK_LIST_FILE_PATH,
@@ -10,7 +10,7 @@ from data import (
     SCRAPED_STOCK_FILE_PATH,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 
 
 def gather_stocks_data():
@@ -53,7 +53,7 @@ def gather_traded_stocks_list():
     logger.info("Traded stocks list saved successfully")
 
 
-def run():
+def scrape():
     """
     The following code snippet has one aim: to download data that is used in the Machine Learning model.
     The data that is being downloaded is up-to-date meaning
@@ -68,4 +68,4 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    scrape()

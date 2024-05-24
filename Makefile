@@ -37,3 +37,8 @@ test-coverage:
 convert:
 	@echo "Converting notebooks..."
 	cd gsp && poetry run poe convert
+
+
+pipeline:
+	@echo "Running pipeline..."
+	cd gsp && poetry run poe pipeline 
