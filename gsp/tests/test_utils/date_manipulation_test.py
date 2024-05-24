@@ -77,7 +77,6 @@ def test_get_nth_previous_working_date_with_leap_years(date_iso: str, step: int,
     assert get_nth_previous_working_date(step, date) == expected
 
 
-@pytest.mark.dev
 def test_get_nth_previous_working_date_with_value_0():
     # --- SETUP ---
     friday = datetime.date(year=2024, month=5, day=24)

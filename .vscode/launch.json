@@ -5,6 +5,17 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Pytest: Mark Dev",
+			"type": "debugpy",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/gsp",
+			"python": "${command:python.interpreterPath}",
+			"module": "pytest",
+			"console": "internalConsole",
+			"justMyCode": true,
+			"args": ["--disable-warnings", "-s", "-v", "-m", "dev", "./tests"]
+		},
+		{
 			"name": "Python: GSP Pipeline",
 			"type": "debugpy",
 			"request": "launch",

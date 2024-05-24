@@ -19,11 +19,32 @@ def transform_generation_predictions_to_mongodb_documents(
     """
     logger.info("Transforming dataframes into mongodb documents...")
 
+    prediction_columns = ["Date", "Name", "Close"]
+    generation_columns = [
+        "PredictionDate",
+        "Name",
+        "CreatedTimestamp",
+        "CategoricalFeatures",
+        "LabelFeatures",
+        "ShiftList",
+        "MWMList",
+        "DaysBackToConsider",
+        "NSteps",
+        "HyperParams",
+    ]
+
+    generation_columns_diff = list(set(generation_columns) - set(generation_df.columns))
+    prediction_columns_diff = list(set(prediction_columns) - set(prediction_df.columns))
+
     if generation_df.empty:
         raise ValueError("Generation dataframe is empty.")
+    elif len(generation_columns_diff) > 0:
+        raise ValueError(f"Generation dataframe must contain the following columns: {generation_columns_diff}")
 
     if prediction_df.empty:
         raise ValueError("Prediction dataframe is empty.")
+    elif len(prediction_columns_diff) > 0:
+        raise ValueError(f"Prediction dataframe must contain the following columns: {prediction_columns_diff}")
 
     predictions_doc: List[Prediction] = [
         Prediction(
@@ -33,6 +54,7 @@ def transform_generation_predictions_to_mongodb_documents(
         )
         for row in prediction_df.to_dict(orient="records")
     ]
+
     generation_row = generation_df.iloc[0]
     generation_doc: Generation = Generation(
         prediction_date=cast(pd.Period, generation_row["PredictionDate"]).to_timestamp().date().isoformat(),

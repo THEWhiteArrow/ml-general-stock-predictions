@@ -6,6 +6,12 @@ from sklearn.compose import ColumnTransformer
 
 @dataclass
 class ColumnTransformerWrapper:
+    """A class that wraps the ColumnTransformer from sklearn.compose.
+    It transforms the pandas DataFrame and returns the transformed DataFrame.
+
+    NOTE: The wrapper will change the names of the columns after transformation.
+    """
+
     transformers: List[Tuple[str, Any, List[str]]]
     remainder: Literal["drop", "passthrough"] = "passthrough"
 

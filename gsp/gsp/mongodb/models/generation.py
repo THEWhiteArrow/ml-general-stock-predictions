@@ -13,7 +13,7 @@ class Generation(me.Document):
     mwm_list = me.ListField(me.IntField(), required=True)
     days_back_to_consider = me.IntField(required=True)
     n_steps = me.IntField(required=True)
-    hyper_params = me.DictField(required=False, default={})
+    hyper_params = me.DictField(required=True)
     predictions = me.ListField(me.ReferenceField(Prediction), required=True)
 
     meta = {"collection": "generations"}  # Optional: Specify the collection name

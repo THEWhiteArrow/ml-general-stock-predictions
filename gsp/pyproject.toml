@@ -37,7 +37,7 @@ typecheck = "mypy ."
 convert = "find . -name '*.ipynb' -exec jupyter nbconvert --to python {} \\;"
 test = "pytest -v -s ./tests --log-cli-level=INFO"
 test-dev = "pytest ./tests -v -s -m dev  --log-cli-level=INFO"
-test-cov = "pytest ./tests -v -s --cov=gsp --log-cli-level=INFO"
+test-cov = "pytest tests -v -s --cov=gsp --log-cli-level=INFO"
 pipeline = "python -m gsp.run"
 
 [tool.pytest.ini_options]
