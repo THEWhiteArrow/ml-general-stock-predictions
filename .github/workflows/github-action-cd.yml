@@ -9,7 +9,7 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-
+        environment: production
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -28,7 +28,11 @@ jobs:
               run: make install
 
             - name: Setup Environment
-              run: echo "not setup yet"
+              run: |
+                  echo "DB_USER=${{secrets.DB_USER}}" >> ./gsp/.env
+                  echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
+                  echo "DB_NAME=${{secrets.DB_NAME}}" >> ./gsp/.env
+                  echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
 
             - name: Convert Jupyter notebooks to Python scripts
               run: make convert
