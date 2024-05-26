@@ -37,6 +37,7 @@ jobs:
                   DB_NAME: ${{ secrets.DB_NAME }}
               run: |
                   pwd
+                  echo "TEST=1" > ./gsp/.env
                   echo "DB_USER=${DB_USER}" >> ./gsp/.env
                   echo "DB_PASSWORD=${DB_PASSWORD}" >> ./gsp/.env
                   echo "CLUSTER_NAME=${CLUSTER_NAME}" >> ./gsp/.env
