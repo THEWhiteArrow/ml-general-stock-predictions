@@ -39,7 +39,7 @@ jobs:
                   CLUSTER_NAME: ${{secrets.CLUSTER_NAME}}
                   DB_NAME: ${{secrets.DB_NAME}}
               run: |
-                  echo Hello ${env.NAME}
+                  echo Hello "$NAME"
                   echo "DB_USER=${{secrets.DB_USER}}" >> ./gsp/.env
                   echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
                   echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
