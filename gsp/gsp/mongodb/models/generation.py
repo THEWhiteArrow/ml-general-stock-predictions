@@ -1,6 +1,9 @@
 import mongoengine as me
 import datetime
 from gsp.mongodb.models.prediction import Prediction
+from lib.logger.setup import setup_logger
+
+logger = setup_logger(__name__)
 
 
 class Generation(me.Document):
@@ -17,3 +20,14 @@ class Generation(me.Document):
     predictions = me.ListField(me.ReferenceField(Prediction), required=True)
 
     meta = {"collection": "generations"}  # Optional: Specify the collection name
+
+    @classmethod
+    def pre_delete(cls, sender, document: "Generation", **kwargs):
+        logger.info(
+            f"Pre-delete signal received for Generation {document.prediction_date} {document.name}. Deleting all associated predictions."
+        )
+        Prediction.objects(id__in=[p.id for p in document.predictions]).delete()  # type: ignore
+
+
+# Connect the pre_delete function to the pre_delete signal of Generation
+me.signals.pre_delete.connect(Generation.pre_delete, sender=Generation)

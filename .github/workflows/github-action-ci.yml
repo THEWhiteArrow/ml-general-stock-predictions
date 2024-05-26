@@ -11,6 +11,7 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        environment: testing
 
         steps:
             - name: Checkout code
@@ -30,61 +31,11 @@ jobs:
               run: make install
 
             - name: Setup Environment
-              env:
-                  DB_USER: ${{ secrets.DB_USER }}
-                  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-                  CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-                  DB_NAME: ${{ secrets.DB_NAME }}
-              run: echo "DB_USER=${DB_USER}" >> gsp/.env && echo "DB_PASSWORD=${DB_PASSWORD}" >> gsp/.env && echo "CLUSTER_NAME=${CLUSTER_NAME}" >> gsp/.env && echo "DB_NAME=${DB_NAME}" >> gsp/.env
-
-            - name: Cache Poetry dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ~/.cache/pypoetry
-                  key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-poetry-
-
-            - name: Cache Environment
-              uses: actions/cache@v4
-              with:
-                  path: gsp/.env
-                  key: ${{ runner.os }}-env-${{ hashFiles('gsp/.env') }}
-                  restore-keys: |
-                      ${{ runner.os }}-env-
-
-    tests:
-        runs-on: ubuntu-latest
-        needs: build
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-
-            - name: Set up Python 3.12
-              uses: actions/setup-python@v5
-              with:
-                  python-version: 3.12
-
-            - name: Restore Poetry cache
-              uses: actions/cache@v4
-              with:
-                  path: ~/.cache/pypoetry
-                  key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-
-            - name: Restore Environment
-              uses: actions/cache@v4
-              with:
-                  path: gsp/.env
-                  key: ${{ runner.os }}-env-${{ hashFiles('gsp/.env') }}
-
-            - name: Set up Poetry
               run: |
-                  pip install poetry
-                  poetry --version
-
-            - name: Install dependencies
-              run: make install
+                  echo "DB_USER=${{secrets.DB_USER}}" >> ./gsp/.env
+                  echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
+                  echo "DB_NAME=${{secrets.DB_NAME}}" >> ./gsp/.env
+                  echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
 
             - name: Convert Jupyter notebooks to Python scripts
               run: make convert
@@ -105,4 +56,4 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: coverage
-                  path: gsp/.coverage
+                  path: ./gsp/.coverage
