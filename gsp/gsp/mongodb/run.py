@@ -43,7 +43,7 @@ def publish(prediction_date: datetime.date):
         generation_df=generation_df, prediction_df=prediction_df
     )
 
-    logger.info("Saving data to MongoDB...")
+    logger.info("Handling saving data to MongoDB...")
     save_generation_predictions_to_mongodb(generation_doc, predictions_doc)
 
     logger.info("Successfully saved data to MongoDB!")
