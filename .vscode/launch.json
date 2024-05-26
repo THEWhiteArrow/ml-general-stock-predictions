@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Pytest: Mark Dev",
+			"name": "Pytest: Dev Mark",
 			"type": "debugpy",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/gsp",
