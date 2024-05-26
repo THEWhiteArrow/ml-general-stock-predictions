@@ -7,6 +7,8 @@ logger = setup_logger(__name__)
 
 
 def save_generation_predictions_to_mongodb(generation_doc: Generation, predictions_doc: List[Prediction]):
+    # TODO: Overwrite the existing predictions if the generation already exists
+
     try:
         # --- PREDICTION ---
         Prediction.objects.insert(predictions_doc)  # type: ignore
