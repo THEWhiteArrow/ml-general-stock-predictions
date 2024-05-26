@@ -35,7 +35,12 @@ jobs:
                   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
                   CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
                   DB_NAME: ${{ secrets.DB_NAME }}
-              run: echo "DB_USER=${DB_USER}" >> gsp/.env && echo "DB_PASSWORD=${DB_PASSWORD}" >> gsp/.env && echo "CLUSTER_NAME=${CLUSTER_NAME}" >> gsp/.env && echo "DB_NAME=${DB_NAME}" >> gsp/.env
+              run: |
+                  pwd
+                  echo "DB_USER=${DB_USER}" >> ./gsp/.env
+                  echo "DB_PASSWORD=${DB_PASSWORD}" >> ./gsp/.env
+                  echo "CLUSTER_NAME=${CLUSTER_NAME}" >> ./gsp/.env
+                  echo "DB_NAME=${DB_NAME}" >> ./gsp/.env
 
             - name: Cache Poetry dependencies
               uses: actions/cache@v4
