@@ -38,10 +38,7 @@ jobs:
               run: |
                   pwd
                   echo "TEST=1" > ./gsp/.env
-                  echo "DB_USER=${DB_USER}" >> ./gsp/.env
-                  echo "DB_PASSWORD=${DB_PASSWORD}" >> ./gsp/.env
-                  echo "CLUSTER_NAME=${CLUSTER_NAME}" >> ./gsp/.env
-                  echo "DB_NAME=${DB_NAME}" >> ./gsp/.env
+                  cat ./gsp/.env
 
             - name: Cache Poetry dependencies
               uses: actions/cache@v4
