@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from gsp.model.model import (
+from gsp.algorithms.model import (
     root_mean_squared_log_error,
     clean_data,
     # engineer_features,

@@ -17,17 +17,6 @@ class Generation(me.Document):
     days_back_to_consider = me.IntField(required=True)
     n_steps = me.IntField(required=True)
     hyper_params = me.DictField(required=False, default={})
-    predictions = me.ListField(me.ReferenceField(Prediction), required=True)
+    predictions = me.ListField(me.ReferenceField(Prediction, reverse_delete_rule=me.CASCADE), required=True)
 
     meta = {"collection": "generations"}  # Optional: Specify the collection name
-
-    @classmethod
-    def pre_delete(cls, sender, document: "Generation", **kwargs):
-        logger.info(
-            f"Pre-delete signal received for Generation {document.prediction_date} {document.name}. Deleting all associated predictions."
-        )
-        Prediction.objects(id__in=[p.id for p in document.predictions]).delete()  # type: ignore
-
-
-# Connect the pre_delete function to the pre_delete signal of Generation
-me.signals.pre_delete.connect(Generation.pre_delete, sender=Generation)

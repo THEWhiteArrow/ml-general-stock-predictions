@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, List, Literal, Tuple
+from typing import Any, List, Literal, Tuple, cast
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 
@@ -14,12 +14,19 @@ class ColumnTransformerWrapper:
 
     transformers: List[Tuple[str, Any, List[str]]]
     remainder: Literal["drop", "passthrough"] = "passthrough"
+    allow_column_prefix: bool = True
 
     def fit_transform(self, X: pd.DataFrame, y: Any | None = None) -> pd.DataFrame:  # type: ignore
         ct = ColumnTransformer(self.transformers, remainder=self.remainder)
 
+        transformed_X = ct.fit_transform(X, y)
+        columns = cast(List[str], ct.get_feature_names_out())
+
+        if not self.allow_column_prefix:
+            columns = [column.split("__")[-1] for column in columns]
+
         return pd.DataFrame(
-            ct.fit_transform(X, y),  # type: ignore
+            transformed_X,  # type: ignore
             index=X.index,
-            columns=ct.get_feature_names_out(),
+            columns=columns,
         )
