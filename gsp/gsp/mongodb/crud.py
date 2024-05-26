@@ -9,8 +9,7 @@ logger = setup_logger(__name__)
 def save_generation_predictions_to_mongodb(generation_doc: Generation, predictions_doc: List[Prediction]):
     try:
         # --- PREDICTION ---
-        for prediction in predictions_doc:
-            prediction.save()
+        Prediction.objects.insert(predictions_doc)  # type: ignore
 
         # --- UPDATE REFERENCE ---
         generation_doc.predictions.extend(prediction.id for prediction in predictions_doc)  # type: ignore
