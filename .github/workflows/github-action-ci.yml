@@ -29,6 +29,14 @@ jobs:
             - name: Install dependencies
               run: make install
 
+            - name: Setup Environment
+              env:
+                  DB_USER: ${{ secrets.DB_USER }}
+                  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                  CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+                  DB_NAME: ${{ secrets.DB_NAME }}
+              run: echo "DB_USER=${DB_USER}" >> gsp/.env && echo "DB_PASSWORD=${DB_PASSWORD}" >> gsp/.env && echo "CLUSTER_NAME=${CLUSTER_NAME}" >> gsp/.env && echo "DB_NAME=${DB_NAME}" >> gsp/.env
+
             - name: Cache Poetry dependencies
               uses: actions/cache@v4
               with:
@@ -36,6 +44,14 @@ jobs:
                   key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-poetry-
+
+            - name: Cache Environment
+              uses: actions/cache@v2
+              with:
+                  path: gsp/.env
+                  key: ${{ runner.os }}-env-${{ hashFiles('gsp/.env') }}
+                  restore-keys: |
+                      ${{ runner.os }}-env-
 
     tests:
         runs-on: ubuntu-latest
@@ -54,6 +70,12 @@ jobs:
               with:
                   path: ~/.cache/pypoetry
                   key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+            - name: Restore Environment
+              uses: actions/cache@v4
+              with:
+                  path: gsp/.env
+                  key: ${{ runner.os }}-env-${{ hashFiles('gsp/.env') }}
 
             - name: Set up Poetry
               run: |

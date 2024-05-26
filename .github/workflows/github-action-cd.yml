@@ -3,6 +3,7 @@ name: CD
 on:
     schedule:
         - cron: "0 17 * * 1-5"
+
     workflow_dispatch:
 
 jobs:
@@ -25,6 +26,14 @@ jobs:
 
             - name: Install dependencies
               run: make install
+
+            - name: Setup Environment
+              env:
+                  DB_USER: ${{ secrets.DB_USER }}
+                  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                  CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+                  DB_NAME: ${{ secrets.DB_NAME }}
+              run: echo "DB_USER=${DB_USER}" >> gsp/.env && echo "DB_PASSWORD=${DB_PASSWORD}" >> gsp/.env && echo "CLUSTER_NAME=${CLUSTER_NAME}" >> gsp/.env && echo "DB_NAME=${DB_NAME}" >> gsp/.env
 
             - name: Convert Jupyter notebooks to Python scripts
               run: make convert
