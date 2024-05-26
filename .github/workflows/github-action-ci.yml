@@ -37,9 +37,9 @@ jobs:
                   DB_NAME: ${{secrets.DB_NAME}}
               run: |
                   echo Hello ${{env.NAME}}
-                  echo "DB_USER=test" >> ./gsp/.env
-                  echo "DB_PASSWORD=test" >> ./gsp/.env
-                  echo "CLUSTER_NAME=test" >> ./gsp/.env
+                  echo "DB_USER=${{secrets.DB_USER}}" >> ./gsp/.env
+                  echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
+                  echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
                   echo "DB_NAME=${{secrets.DB_NAME}}" >> ./gsp/.env
 
             - name: Convert Jupyter notebooks to Python scripts
