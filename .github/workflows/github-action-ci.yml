@@ -49,11 +49,11 @@ jobs:
               with:
                   python-version: 3.12
 
-            - name: Restore dependencies
-              uses: actions/download-artifact@v4
+            - name: Restore Poetry cache
+              uses: actions/cache@v4
               with:
-                  name: dependencies
-                  path: ./.venv
+                  path: ~/.cache/pypoetry
+                  key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
             - name: Set up Poetry
               run: |
