@@ -30,7 +30,10 @@ jobs:
               run: make install
 
             - name: Setup Environment
+
               env:
+                  ACTOR: ${{github.actor}}
+                  NAME: ${{env.NAME}}
                   DB_USER: ${{secrets.DB_USER}}
                   DB_PASSWORD: ${{secrets.DB_PASSWORD}}
                   CLUSTER_NAME: ${{secrets.CLUSTER_NAME}}
@@ -41,6 +44,7 @@ jobs:
                   echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
                   echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
                   echo "DB_NAME=${{secrets.DB_NAME}}" >> ./gsp/.env
+                  cat ./gsp/.env
 
             - name: Convert Jupyter notebooks to Python scripts
               run: make convert
