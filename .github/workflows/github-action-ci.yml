@@ -33,13 +33,13 @@ jobs:
 
               env:
                   ACTOR: ${{github.actor}}
-                  NAME: ${{env.NAME}}
-                  DB_USER: ${{secrets.DB_USER}}
+                  NAME: ${{ env.NAME }}
+                  DB_USER: ${{ secrets.DB_USER }}
                   DB_PASSWORD: ${{secrets.DB_PASSWORD}}
                   CLUSTER_NAME: ${{secrets.CLUSTER_NAME}}
                   DB_NAME: ${{secrets.DB_NAME}}
               run: |
-                  echo Hello ${{env.NAME}}
+                  echo Hello ${env.NAME}
                   echo "DB_USER=${{secrets.DB_USER}}" >> ./gsp/.env
                   echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
                   echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
