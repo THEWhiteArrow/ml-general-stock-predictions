@@ -46,7 +46,7 @@ jobs:
                       ${{ runner.os }}-poetry-
 
             - name: Cache Environment
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: gsp/.env
                   key: ${{ runner.os }}-env-${{ hashFiles('gsp/.env') }}
