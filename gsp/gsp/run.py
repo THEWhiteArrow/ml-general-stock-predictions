@@ -1,7 +1,7 @@
 from lib.logger.setup import setup_logger
 from gsp.scraper.run import scrape
 from gsp.model.model import generate_prediction
-from gsp.mongodb.run import publish
+from gsp.mongodb.run import publish_predictions, publish_history
 
 logger = setup_logger(__name__)
 
@@ -25,8 +25,11 @@ def run():
         hyper_params={},
     )
 
-    logger.info("Running Publish...")
-    publish(prediction_date=prediction_date)
+    logger.info("Running Publish History...")
+    publish_history()
+
+    logger.info("Running Publish Predictions...")
+    publish_predictions(prediction_date=prediction_date)
 
 
 if __name__ == "__main__":
