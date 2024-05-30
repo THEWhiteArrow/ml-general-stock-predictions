@@ -1,94 +1,66 @@
-import datetime
-from data import load_output, SCRAPED_STOCK_FILE_PATH
-from gsp.mongodb.crud import (
-    save_generation_predictions_to_mongodb,
-    save_stocks_history_to_mongodb,
-)
 from lib.logger.setup import setup_logger
-from gsp.utils.date_utils import get_nth_previous_working_date
-from gsp.mongodb.setup import setup_mongodb, setup_collection
-from gsp.mongodb.transformation import (
-    transform_generation_predictions_to_mongodb_documents,
-    transform_stocks_to_mongodb_documents,
-)
-import pandas as pd
+from gsp.mongodb.storage_helper import StorageHelper
+from generated.stock import Stock, History, Prediction
 
 logger = setup_logger(__name__)
 
 
-def publish_predictions(prediction_date: datetime.date):
-    logger.info("Setting up MongoDB connection...")
-    setup_mongodb()
+def run():
+    logger.info("Running mongodb.run...")
+    storage_helper = StorageHelper()
 
-    logger.info("Setting up MongoDB collections...")
-    setup_collection("generations")
-    setup_collection("predictions")
+    storage_helper.setup_connection()
+    # stocks_collection = storage_helper.load_collection("stocks2")
+    # stocks_documents = storage_helper.load_collection_documents("stocks2", reference={"history": "histories"})
 
-    logger.info("Loading output data...")
-    generation_df = load_output(
-        f"generation_{prediction_date.isoformat()}.csv",
-        dtypes={
-            "PredictionDate": "period[D]",
-            "Name": "string",
-            "CategoricalFeatures": "object",
-            "LabelFeatures": "object",
-            "ShiftList": "object",
-            "MWMList": "object",
-            "DaysBackToConsider": "int",
-            "NSteps": "int",
-            "HyperParams": "object",
-        },
-        parse_dates=["CreatedTimestamp"],
+    amazon = Stock.from_dict(
+        {
+            "symbol": "AMZN",
+            "company": "Amazon",
+            "histories": [
+                {"date": "2021-01-01", "open": 1000, "high": 1050, "low": 950, "close": 1025, "volume": 1000000}
+            ],
+            "predictions": [],
+        }
     )
-    prediction_df = load_output(
-        f"prediction_{prediction_date.isoformat()}.csv",
-        dtypes={"Date": "period[D]", "Name": "string", "Close": "float"},
+    google = Stock.from_dict(
+        {
+            "symbol": "GOOGL",
+            "company": "Google",
+            "histories": [
+                {"date": "2021-01-01", "open": 1500, "high": 1550, "low": 1450, "close": 1525, "volume": 1000000}
+            ],
+            "predictions": [],
+        }
     )
+    storage_helper.delete_stocks()
+    storage_helper.save_stocks([amazon, google])
 
-    logger.info("Transforming dataframes into MongoDB documents...")
-    generation_doc, predictions_doc = transform_generation_predictions_to_mongodb_documents(
-        generation_df=generation_df, prediction_df=prediction_df
-    )
-
-    logger.info("Handling saving data to MongoDB...")
-    save_generation_predictions_to_mongodb(generation_doc, predictions_doc)
-
-    logger.info("Successfully saved data to MongoDB!")
-
-
-def publish_history():
-    logger.info("Setting up MongoDB connection...")
-    setup_mongodb()
-
-    logger.info("Setting up MongoDB collections...")
-    setup_collection("stocks")
-    setup_collection("histories")
-
-    logger.info("Loading stocks data...")
-    stocks = pd.read_csv(
-        SCRAPED_STOCK_FILE_PATH,
-        dtype={
-            "Date": "period[D]",
-            "Open": "float",
-            "High": "float",
-            "Low": "float",
-            "Close": "float",
-            "Volume": "int",
-            "Area": "category",
-            "Name": "category",
-        },
+    prediction = Prediction.from_dict(
+        {
+            "created_at": "2024-05-31",
+            "date": "2024-06-01",
+            "name": "testing prediction",
+            "values": [
+                {"value": 2222, "date": "2024-06-02"},
+            ],
+            "config": {
+                "categorical_features": ["a", "b", "c"],
+                "label_features": ["d", "e", "f"],
+                "days_back_to_consider": 10,
+                "mwms": [5, 10, 15],
+                "shifts": [1, 2, 3],
+                "n_step": 5,
+                "hyper_params": {"a": 1, "b": 2, "c": 3},
+            },
+        }
     )
 
-    logger.info("Transforming dataframes into MongoDB documents...")
-    stocks_doc = transform_stocks_to_mongodb_documents(stocks)
+    storage_helper.add_predictions_to_stocks({"AMZN": [prediction]})
 
-    logger.info("Handling saving data to MongoDB...")
-    save_stocks_history_to_mongodb(stocks_doc)
-
-    logger.info("Successfully saved data to MongoDB!")
+    logger.info("Closing connection...")
+    storage_helper.close_connection()
 
 
 if __name__ == "__main__":
-    prediction_date = get_nth_previous_working_date(n=0, date=datetime.date.today())
-    publish_history()
-    # publish_predictions(prediction_date=prediction_date)
+    run()

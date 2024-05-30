@@ -3,6 +3,7 @@ data/output/*.csv
 data/output/*.png
 !data/output/test_history_log.csv
 gsp/model/*.py
+generated/*.py
 
 *.log
 .pytest_cache

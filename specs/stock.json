@@ -1,0 +1,36 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"$id": "stock",
+	"title": "Stock",
+	"description": "Stock information",
+	"properties": {
+		"_id": {
+			"type": "string",
+			"description": "Optional ID of the object in the database"
+		},
+		"company": {
+			"type": "string",
+			"description": "Company name"
+		},
+		"symbol": {
+			"type": "string",
+			"description": "Stock symbol"
+		},
+		"histories": {
+			"type": "array",
+			"description": "Stock history",
+			"items": {
+				"$ref": "history.json"
+			}
+		},
+		"predictions": {
+			"type": "array",
+			"description": "Stock predictions",
+			"items": {
+				"$ref": "prediction.json"
+			}
+		}
+	},
+	"required": ["company", "symbol", "histories", "predictions"]
+}

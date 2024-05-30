@@ -19,6 +19,7 @@
 			"name": "Python: GSP Pipeline",
 			"type": "debugpy",
 			"request": "launch",
+			"console": "internalConsole",
 			"program": "${workspaceFolder}/gsp/gsp/run.py"
 		},
 		{
@@ -32,6 +33,7 @@
 			"name": "Python: Scraper",
 			"type": "debugpy",
 			"request": "launch",
+			"console": "internalConsole",
 			"program": "${workspaceFolder}/gsp/gsp/scraper/run.py"
 		},
 		{
@@ -39,7 +41,7 @@
 			"type": "debugpy",
 			"request": "launch",
 			"program": "${file}",
-			"console": "integratedTerminal"
+			"console": "internalConsole"
 		}
 	]
 }

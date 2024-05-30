@@ -1,6 +1,8 @@
 install:
-	@echo "Installing dependencies..."
+	@echo "Installing poetry dependencies..."
 	cd gsp && poetry install
+	@echo "Installing npm dependencies..."
+	npm install quicktype -g
 
 scrape:
 	@echo "Scraping..."
@@ -42,3 +44,7 @@ convert:
 pipeline:
 	@echo "Running pipeline..."
 	cd gsp && poetry run poe pipeline 
+
+codegen:
+	@echo "Generating code..."
+	quicktype -s schema -l python -o ./gsp/generated/stock.py ./specs/stock.json

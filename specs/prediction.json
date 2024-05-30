@@ -1,0 +1,108 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"$id": "prediction",
+	"title": "Prediction",
+	"description": "Prediction data",
+	"properties": {
+		"id": {
+			"type": "string",
+			"description": "Optional ID of the object in the database"
+		},
+		"date": {
+			"type": "string",
+			"format": "date",
+			"description": "Date of the prediction"
+		},
+		"name": {
+			"type": "string",
+			"description": "Name of the prediction"
+		},
+		"created_at": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Date and time of the prediction creation"
+		},
+		"values": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Value"
+			}
+		},
+		"config": {
+			"$ref": "#/definitions/Config"
+		}
+	},
+	"required": ["date", "name", "created_at", "values", "config"],
+	"definitions": {
+		"Value": {
+			"type": "object",
+			"properties": {
+				"date": {
+					"type": "string",
+					"format": "date",
+					"description": "Date of the value"
+				},
+				"value": {
+					"type": "number",
+					"description": "Value"
+				}
+			},
+			"required": ["date", "value"]
+		},
+		"Config": {
+			"type": "object",
+			"properties": {
+				"categorical_features": {
+					"type": "array",
+					"description": "List of categorical features used in the model",
+					"items": {
+						"type": "string"
+					}
+				},
+				"label_features": {
+					"type": "array",
+					"description": "List of label features used in the model",
+					"items": {
+						"type": "string"
+					}
+				},
+				"shifts": {
+					"type": "array",
+					"description": "List of shifts (lags) used in the model",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"mwms": {
+					"type": "array",
+					"description": "List of moving window means used in the model",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"days_back_to_consider": {
+					"description": "Number of days back to consider in the model",
+					"type": "integer"
+				},
+				"n_step": {
+					"description": "Number of steps to predict",
+					"type": "integer"
+				},
+				"hyper_params": {
+					"description": "Hyper parameters used in the model",
+					"type": "object"
+				}
+			},
+			"required": [
+				"categorical_features",
+				"label_features",
+				"shifts",
+				"mwms",
+				"days_back_to_consider",
+				"n_step",
+				"hyper_params"
+			]
+		}
+	}
+}
