@@ -1,6 +1,8 @@
 import json
 from gsp.mongodb.models.generation import Generation
 from gsp.mongodb.models.prediction import Prediction
+from gsp.mongodb.models.stock import Stock
+from gsp.mongodb.models.history import History
 import pandas as pd
 from typing import List, Tuple, cast
 from lib.logger.setup import setup_logger
@@ -71,3 +73,36 @@ def transform_generation_predictions_to_mongodb_documents(
     )
 
     return generation_doc, predictions_doc
+
+
+def transform_stocks_to_mongodb_documents(stocks: pd.DataFrame) -> List[Stock]:
+
+    logger.info("Transforming stocks dataframe into mongodb documents...")
+
+    stocks_doc: List[Stock] = []
+
+    def convert_to_document(group: pd.DataFrame):
+        stock = Stock(
+            name=group["Name"].iloc[0],
+            area=group["Area"].iloc[0],
+            history=[
+                History(
+                    date=cast(pd.Period, row["Date"]).to_timestamp().date().isoformat(),
+                    open=row["Open"],
+                    high=row["High"],
+                    low=row["Low"],
+                    close=row["Close"],
+                    adj_close=row["Adj Close"],
+                    volume=row["Volume"],
+                )
+                for row in group.to_dict(orient="records")
+            ],
+        )
+
+        stocks_doc.append(stock)
+
+        return group
+
+    stocks.groupby(["Name"], observed=True).apply(convert_to_document)
+
+    return stocks_doc

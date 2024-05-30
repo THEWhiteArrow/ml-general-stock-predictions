@@ -2,6 +2,9 @@ from typing import List, cast
 from lib.logger.setup import setup_logger
 from gsp.mongodb.models.generation import Generation
 from gsp.mongodb.models.prediction import Prediction
+from gsp.mongodb.models.stock import Stock
+from gsp.mongodb.models.history import History
+
 
 logger = setup_logger(__name__)
 
@@ -37,3 +40,19 @@ def save_generation_predictions_to_mongodb(generation_doc: Generation, predictio
         if generation_doc.id:  # type: ignore
             generation_doc.delete()
         raise Exception(f"Unable to save data to MongoDB. {e}")
+
+
+def save_stocks_history_to_mongodb(stocks_doc: List[Stock]):
+
+    Stock.drop_collection()
+    History.drop_collection()
+    try:
+        logger.info("Saving stocks history to MongoDB...")
+
+        for stock in stocks_doc:
+
+            History.objects.insert(stock.history)  # type: ignore
+            stock.save()
+
+    except Exception as e:
+        logger.error(f"Unable to save data to MongoDB. Removing all added: {e}")
