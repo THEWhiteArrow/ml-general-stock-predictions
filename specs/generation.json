@@ -15,6 +15,10 @@
 			"format": "date",
 			"description": "Date of the prediction"
 		},
+		"version": {
+			"type": "string",
+			"description": "Version of the prediction"
+		},
 		"name": {
 			"type": "string",
 			"description": "Name of the prediction"
