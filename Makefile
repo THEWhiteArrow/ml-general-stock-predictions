@@ -48,3 +48,7 @@ pipeline:
 codegen:
 	@echo "Generating code..."
 	quicktype -s schema -l python -o ./gsp/generated/stock.py ./specs/stock.json
+	quicktype -s schema -l python -o ./gsp/generated/history.py ./specs/history.json
+	quicktype -s schema -l python -o ./gsp/generated/prediction.py ./specs/prediction.json
+	quicktype -s schema -l python -o ./gsp/generated/generation.py ./specs/generation.json
+

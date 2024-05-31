@@ -1,6 +1,10 @@
+from gsp.mongodb.stock_ref_mapping import StockRefMapping
 from lib.logger.setup import setup_logger
 from gsp.mongodb.storage_helper import StorageHelper
-from generated.stock import Stock, History, Prediction
+from generated.stock import Stock
+from generated.prediction import Prediction
+from generated.history import History
+from generated.generation import Generation
 
 logger = setup_logger(__name__)
 
@@ -10,53 +14,58 @@ def run():
     storage_helper = StorageHelper()
 
     storage_helper.setup_connection()
-    # stocks_collection = storage_helper.load_collection("stocks2")
-    # stocks_documents = storage_helper.load_collection_documents("stocks2", reference={"history": "histories"})
 
     amazon = Stock.from_dict(
         {
             "symbol": "AMZN",
             "company": "Amazon",
-            "histories": [
-                {"date": "2021-01-01", "open": 1000, "high": 1050, "low": 950, "close": 1025, "volume": 1000000}
-            ],
-            "predictions": [],
         }
     )
     google = Stock.from_dict(
         {
             "symbol": "GOOGL",
             "company": "Google",
-            "histories": [
-                {"date": "2021-01-01", "open": 1500, "high": 1550, "low": 1450, "close": 1525, "volume": 1000000}
-            ],
-            "predictions": [],
         }
     )
-    storage_helper.delete_stocks()
-    storage_helper.save_stocks([amazon, google])
-
-    prediction = Prediction.from_dict(
+    some_generation = Generation.from_dict(
         {
             "created_at": "2024-05-31",
             "date": "2024-06-01",
-            "name": "testing prediction",
-            "values": [
-                {"value": 2222, "date": "2024-06-02"},
-            ],
-            "config": {
-                "categorical_features": ["a", "b", "c"],
-                "label_features": ["d", "e", "f"],
-                "days_back_to_consider": 10,
-                "mwms": [5, 10, 15],
-                "shifts": [1, 2, 3],
-                "n_step": 5,
-                "hyper_params": {"a": 1, "b": 2, "c": 3},
-            },
+            "name": "testing generation",
+            "categorical_features": ["a", "b", "c"],
+            "label_features": ["d", "e", "f"],
+            "days_back_to_consider": 10,
+            "mwms": [5, 10, 15],
+            "shifts": [1, 2, 3],
+            "n_step": 5,
+            "hyper_params": {"a": 1, "b": 2, "c": 3},
+        }
+    )
+    amazon_prediction = Prediction.from_dict(
+        {
+            "date": "2024-06-03",
+            "close": 1234.56,
+        }
+    )
+    google_history = History.from_dict(
+        {
+            "date": "2024-06-01",
+            "close": 1234.56,
+            "high": 1234.56,
+            "low": 1234.56,
+            "open": 1234.56,
+            "volume": 123456,
         }
     )
 
-    storage_helper.add_predictions_to_stocks({"AMZN": [prediction]})
+    storage_helper.cleanse(pattern="v2")
+
+    history_mapping = StockRefMapping().add_stock("GOOGL", [google_history]).add_stock("AMZN", [])
+    prediction_mapping = StockRefMapping().add_stock("GOOGL", []).add_stock("AMZN", [amazon_prediction])
+
+    storage_helper.save_stocks([amazon, google])
+    storage_helper.add_histories(history_mapping)
+    storage_helper.add_generation_with_predictions(some_generation, prediction_mapping)
 
     logger.info("Closing connection...")
     storage_helper.close_connection()

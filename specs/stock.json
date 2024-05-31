@@ -17,20 +17,10 @@
 			"type": "string",
 			"description": "Stock symbol"
 		},
-		"histories": {
-			"type": "array",
-			"description": "Stock history",
-			"items": {
-				"$ref": "history.json"
-			}
-		},
-		"predictions": {
-			"type": "array",
-			"description": "Stock predictions",
-			"items": {
-				"$ref": "prediction.json"
-			}
+		"area": {
+			"type": "string",
+			"description": "Main area of the company"
 		}
 	},
-	"required": ["company", "symbol", "histories", "predictions"]
+	"required": ["company", "symbol"]
 }

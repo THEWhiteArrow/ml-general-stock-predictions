@@ -1,11 +1,14 @@
+import re
 from dataclasses import dataclass
 import os
-from typing import Dict, List, Literal, Optional, Tuple
+from typing import Dict, List, Optional
 import pymongo as pm
 from dotenv import load_dotenv
 from lib.logger.setup import setup_logger
-from generated.stock import Stock, History, Prediction
+from generated.stock import Stock
+from generated.generation import Generation
 from gsp.mongodb.storage_collections import StorageCollections
+from gsp.mongodb.stock_ref_mapping import StockRefMapping
 
 logger = setup_logger(__name__)
 
@@ -48,7 +51,7 @@ class StorageHelper:
     def close_connection(self) -> None:
         logger.info("Closing connection...")
         if self.client:
-            self.client.close()
+            self.client.close()  # type: ignore
             self.client = None
 
     def load_collection(self, collection_name: str, use_reference: bool = False):
@@ -85,126 +88,82 @@ class StorageHelper:
         collection.delete_many(query)
 
     # --- SPECIFIC METHODS ---
+    # --- NOTE ---
+    """
+    The stocks should have a reference to both histories and generations.
+    However, since the number of histories and generations can be extremely large and the stocks are relatively small,
+    it is better to have the histories and generations reference the stocks instead.
+    """
 
-    def delete_stocks(self, cascade: bool = True) -> None:
-        logger.info("Deleting stocks...")
-        self.delete_documents(StorageCollections.STOCKS.value, {})
-        if cascade:
-            self.delete_documents(StorageCollections.HISTORIES.value, {})
-            self.delete_documents(StorageCollections.PREDICTIONS.value, {})
+    def cleanse(self, pattern: str) -> None:
+        logger.info("Cleansing database for storage helper...")
+        if self.client is None or self.db_name is None:
+            raise Exception("No connection established")
 
-    def save_stocks(self, stocks: List[Stock]):
-        """An optimized method to save stocks, histories, and predictions in one go.
+        for collection_name in StorageCollections:
+            if re.search(pattern, collection_name.value):
+                self.delete_documents(collection_name.value, {})
 
-        Args:
-            stocks (List[Stock]): List of Stock objects
-
-        Returns:
-            InsertManyResult: Resutls of the insert_many operation
-        """
+    def save_stocks(self, stocks: List[Stock]) -> pm.results.InsertManyResult:
         logger.info("Saving stocks...")
+        stock_documents = [stock.to_dict() for stock in stocks]
+        results = self.insert_documents(StorageCollections.STOCKS.value, stock_documents)
 
-        stocks_history_mapping: List[Tuple[str, int]] = []
-        stocks_prediction_mapping: List[Tuple[str, int]] = []
-        all_histories: List[History] = []
-        all_predictions: List[Prediction] = []
-        all_stocks_dicts: List[Dict] = []
+        return results
 
-        stocks_history_mapping = [(stock.symbol, len(stock.histories)) for stock in stocks]
-        stocks_prediction_mapping = [(stock.symbol, len(stock.predictions)) for stock in stocks]
-        all_histories = [history for stock in stocks for history in stock.histories]
-        all_predictions = [prediction for stock in stocks for prediction in stock.predictions]
+    def add_histories(self, mapping: StockRefMapping) -> pm.results.InsertManyResult:
+        logger.info("Adding histories...")
 
-        if all_histories:
-            histories_res = self.save_histories(all_histories)
-        else:
-            histories_res = None
+        stocks_symbols: List[str] = mapping.get_symbols()
+        stocks_collection: pm.collection.Collection = self.load_collection(StorageCollections.STOCKS.value)
+        stocks_retrived: List[Dict] = list(stocks_collection.find({"symbol": {"$in": stocks_symbols}}))
 
-        if all_predictions:
-            predictions_res = self.save_predictions(all_predictions)
-        else:
-            predictions_res = None
+        if len(stocks_retrived) != len(stocks_symbols):
+            raise Exception("Some stocks are not found in the database")
 
-        history_counter = 0
-        prediction_counter = 0
+        stocks_retrived_mapping: Dict[str, Dict] = {stock["symbol"]: stock for stock in stocks_retrived}
 
-        for i, stock in enumerate(stocks):
-            stock_dict = stock.to_dict()
+        all_histories: List[Dict] = []
 
-            if histories_res is not None:
-                stock_dict["histories"] = histories_res.inserted_ids[
-                    history_counter : history_counter + stocks_history_mapping[i][1]
+        for stock_symbol, histories in mapping.get_items():
+            all_histories.extend(
+                [{**history.to_dict(), "stock": stocks_retrived_mapping[stock_symbol]["_id"]} for history in histories]
+            )
+
+        results = self.insert_documents(StorageCollections.HISTORIES.value, all_histories)
+
+        return results
+
+    def add_generation_with_predictions(
+        self, generation: Generation, mapping: StockRefMapping
+    ) -> pm.results.InsertManyResult:
+        logger.info("Adding generation with predictions...")
+
+        stocks_symbols: List[str] = mapping.get_symbols()
+        stocks_collection: pm.collection.Collection = self.load_collection(StorageCollections.STOCKS.value)
+        stocks_retrived: List[Dict] = list(stocks_collection.find({"symbol": {"$in": stocks_symbols}}))
+
+        if len(stocks_retrived) != len(stocks_symbols):
+            raise Exception("Some stocks are not found in the database")
+
+        stocks_retrived_mapping: Dict[str, Dict] = {stock["symbol"]: stock for stock in stocks_retrived}
+
+        generation_results = self.insert_documents(StorageCollections.GENERATIONS.value, [generation.to_dict()])
+        generation_id: str = generation_results.inserted_ids[0]
+
+        all_predictions: List[Dict] = []
+        for stock_symbol, predictions in mapping.get_items():
+            all_predictions.extend(
+                [
+                    {
+                        **prediction.to_dict(),
+                        "stock": stocks_retrived_mapping[stock_symbol]["_id"],
+                        "generation": generation_id,
+                    }
+                    for prediction in predictions
                 ]
+            )
 
-            if predictions_res is not None:
-                stock_dict["predictions"] = predictions_res.inserted_ids[
-                    prediction_counter : prediction_counter + stocks_prediction_mapping[i][1]
-                ]
+        predictions_results = self.insert_documents(StorageCollections.PREDICTIONS.value, all_predictions)
 
-            all_stocks_dicts.append(stock_dict)
-            history_counter += stocks_history_mapping[i][1]
-            prediction_counter += stocks_prediction_mapping[i][1]
-
-        stocks_res = self.insert_documents(StorageCollections.STOCKS.value, all_stocks_dicts)
-        return stocks_res
-
-    def save_histories(self, histories: List[History]):
-        logger.info("Saving histories...")
-        histories_dicts = [history.to_dict() for history in histories]
-        histories_res = self.insert_documents(StorageCollections.HISTORIES.value, histories_dicts)
-
-        return histories_res
-
-    def save_predictions(self, predictions: List[Prediction]):
-        logger.info("Saving predictions...")
-        predictions_dicts = [prediction.to_dict() for prediction in predictions]
-        predictions_res = self.insert_documents(StorageCollections.PREDICTIONS.value, predictions_dicts)
-
-        return predictions_res
-
-    def find_stock(self, symbol: str) -> Optional[Stock]:
-        logger.info(f"Finding stock with symbol {symbol}...")
-        collection = self.load_collection(StorageCollections.STOCKS.value)
-        stock = collection.find_one({"symbol": symbol})
-        if stock is None:
-            return None
-
-        stock["histories"] = list(
-            self.load_collection(StorageCollections.HISTORIES.value).find({"_id": {"$in": stock["histories"]}})
-        )
-
-        stock["predictions"] = list(
-            self.load_collection(StorageCollections.PREDICTIONS.value).find({"_id": {"$in": stock["predictions"]}})
-        )
-
-        return Stock.from_dict(stock)
-
-    def add_predictions_to_stocks(self, mapping: Dict[str, List[Prediction]]):
-        logger.info("Adding predictions to stocks...")
-
-        stocks_prediction_mapping: List[Tuple[str, int]] = []
-        all_predictions: List[Prediction] = []
-
-        stocks_prediction_mapping = [(symbol, len(predictions)) for symbol, predictions in mapping.items()]
-        all_predictions = [prediction for predictions in mapping.values() for prediction in predictions]
-
-        predictions_res = self.save_predictions(all_predictions)
-
-        prediction_counter = 0
-        all_stocks_dicts: List[Dict] = []
-
-        for symbol, count in stocks_prediction_mapping:
-            stock = self.find_stock(symbol)
-            if stock is None:
-                logger.warning(f"Stock with symbol {symbol} not found")
-                raise Exception(f"Stock with symbol {symbol} not found")
-
-            stock_dict = stock.to_dict()
-            stock_dict["predictions"] = predictions_res.inserted_ids[prediction_counter : prediction_counter + count]
-            all_stocks_dicts.append(stock_dict)
-
-            prediction_counter += count
-
-        raise NotImplementedError("This method is not implemented yet")
-        # stocks_res = self.insert_documents(StorageCollections.STOCKS.value, all_stocks_dicts)
-        # return stocks_res
+        return predictions_results
