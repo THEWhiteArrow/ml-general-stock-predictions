@@ -1,11 +1,11 @@
 import datetime
-from typing import List
 from data import load_output, load_scraped_stocks
-import pandas as pd
-from generated.stock import Stock
-from generated.generation import Generation
-from generated.history import History
-from generated.prediction import Prediction
+from gsp.publisher.transform import (
+    transform_to_generation,
+    transform_to_histories,
+    transform_to_predictions,
+    transform_to_stocks,
+)
 from lib.logger.setup import setup_logger
 
 logger = setup_logger(__name__)
@@ -17,27 +17,21 @@ def run(run_date: datetime.date):
     stocks_df = load_scraped_stocks()
     generation_df = load_output(f"generation_{run_date.isoformat()}.csv")
     prediction_df = load_output(f"prediction_{run_date.isoformat()}.csv")
-    generation_data = generation_df.head(1).to_dict(orient="records")[0]
-    prediction_data = prediction_df.to_dict(orient="records")
-    stocks_data = stocks_df.to_dict(orient="records")
 
     # --- DATA PREPARATION ---
-    generation: Generation
-    predictions: List[Prediction]
-    stocks: List[Stock]
-    histories: List[History]
+    logger.info("Transforming data...")
+    generation = transform_to_generation(generation_df)
+    predictions = transform_to_predictions(prediction_df)
+    stocks = transform_to_stocks(stocks_df)
+    histories = transform_to_histories(stocks_df)
 
-    # --- TODO: fix this ---
-    generation_data["prediction_date"]
-    generation = Generation.from_dict(generation_data)
-    predictions = [Prediction.from_dict(prediction) for prediction in prediction_data]
-    stocks = [Stock.from_dict(stock) for stock in stocks_data]
-    histories = [History.from_dict(stock) for stock in stocks_data]
+    # --- PUBLISH DATA ---
+    logger.info("Publishing data...")
 
-    logger.info("Data transformed successfully")
+    logger.info("Publishing finished successfully")
 
 
 if __name__ == "__main__":
-    run_date = datetime.date.today()
-    # run_date = datetime.date(year=2024, month=5, day=24)
+    # run_date = datetime.date.today()
+    run_date = datetime.date(year=2024, month=5, day=31)
     run(run_date=run_date)
