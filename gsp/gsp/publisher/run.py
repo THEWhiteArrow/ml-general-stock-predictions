@@ -1,12 +1,14 @@
 import datetime
 from data import load_output, load_scraped_stocks
+from gsp.publisher.publish import publish_data
 from gsp.publisher.transform import (
-    transform_to_generation,
-    transform_to_histories,
-    transform_to_predictions,
-    transform_to_stocks,
+    transform_generation,
+    transform_histories,
+    transform_predictions,
+    transform_stocks,
 )
 from lib.logger.setup import setup_logger
+import pickle
 
 logger = setup_logger(__name__)
 
@@ -20,13 +22,37 @@ def run(run_date: datetime.date):
 
     # --- DATA PREPARATION ---
     logger.info("Transforming data...")
-    generation = transform_to_generation(generation_df)
-    predictions = transform_to_predictions(prediction_df)
-    stocks = transform_to_stocks(stocks_df)
-    histories = transform_to_histories(stocks_df)
+
+    # --- NOTE: CACHING ---
+    # ->> For development and debugging purposes only, ->> remove in production
+    try:
+        with open("cache.pkl", "rb") as f:
+            cache = pickle.load(f)
+            stocks = cache["stocks"]
+            generation = cache["generation"]
+            predictions_mapping = cache["predictions_mapping"]
+            histories_mapping = cache["histories_mapping"]
+    except FileNotFoundError:
+        stocks = transform_stocks(stocks_df)
+        generation = transform_generation(generation_df)
+        predictions_mapping = transform_predictions(prediction_df)
+        histories_mapping = transform_histories(stocks_df)
+
+        # store generation, predictions, stocks and histores in a cache
+        cache = {
+            "stocks": stocks,
+            "generation": generation,
+            "predictions_mapping": predictions_mapping,
+            "histories_mapping": histories_mapping,
+        }
+
+        # save the cache
+        with open("cache.pkl", "wb") as f:
+            pickle.dump(cache, f)
 
     # --- PUBLISH DATA ---
     logger.info("Publishing data...")
+    publish_data(run_date, stocks, histories_mapping, generation, predictions_mapping)
 
     logger.info("Publishing finished successfully")
 

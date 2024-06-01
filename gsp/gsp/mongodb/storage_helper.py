@@ -22,6 +22,8 @@ class StorageHelper:
     cluster_name: Optional[str] = None
 
     # --- GENERIC METHODS ---
+    def __post_init__(self):
+        self.setup_connection()
 
     def setup_connection(self) -> "StorageHelper":
         logger.info("Setting up connection...")
@@ -54,18 +56,20 @@ class StorageHelper:
             self.client.close()  # type: ignore
             self.client = None
 
-    def load_collection(self, collection_name: str, use_reference: bool = False):
-        logger.info(f"Loading collection {collection_name}...")
+    def load_collection(self, collection_enum: StorageCollections, use_reference: bool = False):
+        logger.info(f"Loading collection {collection_enum.value}...")
         if self.client is None or self.db_name is None:
             raise Exception("No connection established")
 
-        collection = self.client[self.db_name][collection_name]
+        collection = self.client[self.db_name][collection_enum.value]
 
         return collection
 
-    def load_collection_documents(self, collection_name: str, reference: Dict[str, str] = {}):
-        logger.info(f"Loading documents from {collection_name}...")
-        collection = self.load_collection(collection_name)
+    def load_collection_documents(
+        self, collection_enum: StorageCollections, reference: Dict[str, StorageCollections] = {}
+    ):
+        logger.info(f"Loading documents from {collection_enum.value}...")
+        collection = self.load_collection(collection_enum)
         documents = list(collection.find())
         for document in documents:
             for field, ref_collection in reference.items():
@@ -75,16 +79,16 @@ class StorageHelper:
                     document[field] = ref_data if isinstance(document[field], list) else ref_data[0]
         return documents
 
-    def insert_documents(self, collection_name: str, documents: List[Dict]):
-        logger.info(f"Inserting documents into {collection_name}...")
-        collection = self.load_collection(collection_name)
+    def insert_documents(self, collection_enum: StorageCollections, documents: List[Dict]):
+        logger.info(f"Inserting documents into {collection_enum.value}...")
+        collection = self.load_collection(collection_enum)
         results = collection.insert_many(documents)
 
         return results
 
-    def delete_documents(self, collection_name: str, query: Dict) -> None:
-        logger.info(f"Deleting documents from {collection_name}...")
-        collection = self.load_collection(collection_name)
+    def delete_documents(self, collection_enum: StorageCollections, query: Dict) -> None:
+        logger.info(f"Deleting documents from {collection_enum.value}...")
+        collection = self.load_collection(collection_enum)
         collection.delete_many(query)
 
     # --- SPECIFIC METHODS ---
@@ -102,20 +106,22 @@ class StorageHelper:
 
         for collection_name in StorageCollections:
             if re.search(pattern, collection_name.value):
-                self.delete_documents(collection_name.value, {})
+                self.delete_documents(collection_name, {})
 
-    def save_stocks(self, stocks: List[Stock]) -> pm.results.InsertManyResult:
+    def save_stocks(self, stocks: List[Stock]) -> List[Stock]:
         logger.info("Saving stocks...")
         stock_documents = [stock.to_dict() for stock in stocks]
-        results = self.insert_documents(StorageCollections.STOCKS.value, stock_documents)
+        results = self.insert_documents(StorageCollections.STOCKS, stock_documents)
 
-        return results
+        for i, stock in enumerate(stocks):
+            stock.id = results.inserted_ids[i]
+        return stocks
 
     def add_histories(self, mapping: StockRefMapping) -> pm.results.InsertManyResult:
         logger.info("Adding histories...")
 
         stocks_symbols: List[str] = mapping.get_symbols()
-        stocks_collection: pm.collection.Collection = self.load_collection(StorageCollections.STOCKS.value)
+        stocks_collection: pm.collection.Collection = self.load_collection(StorageCollections.STOCKS)
         stocks_retrived: List[Dict] = list(stocks_collection.find({"symbol": {"$in": stocks_symbols}}))
 
         if len(stocks_retrived) != len(stocks_symbols):
@@ -130,7 +136,7 @@ class StorageHelper:
                 [{**history.to_dict(), "stock": stocks_retrived_mapping[stock_symbol]["_id"]} for history in histories]
             )
 
-        results = self.insert_documents(StorageCollections.HISTORIES.value, all_histories)
+        results = self.insert_documents(StorageCollections.HISTORIES, all_histories)
 
         return results
 
@@ -140,7 +146,7 @@ class StorageHelper:
         logger.info("Adding generation with predictions...")
 
         stocks_symbols: List[str] = mapping.get_symbols()
-        stocks_collection: pm.collection.Collection = self.load_collection(StorageCollections.STOCKS.value)
+        stocks_collection: pm.collection.Collection = self.load_collection(StorageCollections.STOCKS)
         stocks_retrived: List[Dict] = list(stocks_collection.find({"symbol": {"$in": stocks_symbols}}))
 
         if len(stocks_retrived) != len(stocks_symbols):
@@ -148,7 +154,7 @@ class StorageHelper:
 
         stocks_retrived_mapping: Dict[str, Dict] = {stock["symbol"]: stock for stock in stocks_retrived}
 
-        generation_results = self.insert_documents(StorageCollections.GENERATIONS.value, [generation.to_dict()])
+        generation_results = self.insert_documents(StorageCollections.GENERATIONS, [generation.to_dict()])
         generation_id: str = generation_results.inserted_ids[0]
 
         all_predictions: List[Dict] = []
@@ -164,6 +170,6 @@ class StorageHelper:
                 ]
             )
 
-        predictions_results = self.insert_documents(StorageCollections.PREDICTIONS.value, all_predictions)
+        predictions_results = self.insert_documents(StorageCollections.PREDICTIONS, all_predictions)
 
         return predictions_results

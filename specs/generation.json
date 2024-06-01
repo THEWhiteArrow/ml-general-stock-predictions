@@ -13,20 +13,16 @@
 		"date": {
 			"type": "string",
 			"format": "date",
-			"description": "Date of the prediction"
-		},
-		"version": {
-			"type": "string",
-			"description": "Version of the prediction"
+			"description": "Date of the generation"
 		},
 		"name": {
 			"type": "string",
-			"description": "Name of the prediction"
+			"description": "Name of the generation"
 		},
 		"created_at": {
 			"type": "string",
 			"format": "date-time",
-			"description": "Date and time of the prediction creation"
+			"description": "Date and time of the generation creation"
 		},
 		"categorical_features": {
 			"type": "array",

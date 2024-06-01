@@ -11,13 +11,16 @@ class StockRefMapping:
 
     mapping: Dict[STOCK_NAME_ALIAS, List[Union[History, Prediction]]] = field(default_factory=dict)
 
-    def add_stock(self, stock_name: STOCK_NAME_ALIAS, data: List[Union[History, Prediction]]) -> "StockRefMapping":
+    def add(self, stock_name: STOCK_NAME_ALIAS, data: List[Union[History, Prediction]]) -> "StockRefMapping":
         if stock_name in self.mapping:
-            raise Exception(f"Stock name {stock_name} already exists in mapping")
-
-        self.mapping[stock_name] = data
+            self.mapping[stock_name].extend(data)
+        else:
+            self.mapping[stock_name] = data
 
         return self
+
+    def get_by_symbol(self, stock_name: STOCK_NAME_ALIAS) -> List[Union[History, Prediction]]:
+        return self.mapping.get(stock_name, [])
 
     def get_symbols(self) -> List[STOCK_NAME_ALIAS]:
         return list(self.mapping.keys())

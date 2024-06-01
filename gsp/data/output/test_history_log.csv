@@ -1,4 +1,4 @@
-version,created_at,prediction_date,rmsle,hyper_params,categorical_features,label_features,n_step,shifts,mwms,phase,days_back_to_consider,single_problem_approach
+version,created_at,date,rmsle,hyper_params,categorical_features,label_features,n_step,shifts,mwms,phase,days_back_to_consider,single_problem_approach
 1,2024-05-23,2024-04-24,0.3655728359403529,{},"['DayOfWeek', 'AreaCat']",['Year'],21,"[1, 2, 3]","[5, 10, 15]",1,1260,False
 2,2024-05-23,2024-04-24,0.3655728359403529,{},"['DayOfWeek', 'AreaCat']",['Year'],21,"[1, 2, 3]","[5, 10, 15]",1,1260,False
 3,2024-05-23,2024-04-24,0.3655728359403529,{},"['DayOfWeek', 'AreaCat']",['Year'],21,"[1, 2, 3]","[5, 10, 15]",1,1260,False
