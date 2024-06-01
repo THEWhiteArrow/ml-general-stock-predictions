@@ -37,9 +37,6 @@ jobs:
                   echo "DB_NAME=${{secrets.DB_NAME}}" >> ./gsp/.env
                   echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
 
-            - name: Convert Jupyter notebooks to Python scripts
-              run: make convert
-
             - name: Run formatting check
               run: make fmt-check
 
