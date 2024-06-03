@@ -1,6 +1,8 @@
 import datetime
-from typing import List
+from typing import List, Union
 from generated.generation import Generation
+from generated.history import History
+from generated.prediction import Prediction
 from generated.stock import Stock
 from gsp.mongodb.stock_ref_mapping import StockRefMapping
 from gsp.mongodb.storage_collections import StorageCollections
@@ -24,8 +26,11 @@ def publish_data(
     """
     storage_helper = StorageHelper()
 
-    stocks_in_db = storage_helper.load_collection_documents(StorageCollections.STOCKS)
-    stocks_symbols_in_db = [stock["symbol"] for stock in stocks_in_db]
+    stocks_in_db = [
+        Stock.from_dict(stock) for stock in storage_helper.load_collection_documents(StorageCollections.STOCKS)
+    ]
+
+    stocks_symbols_in_db = [stock.symbol for stock in stocks_in_db]
 
     stocks_not_in_db: List[Stock] = [stock for stock in stocks if stock.symbol not in stocks_symbols_in_db]
     if len(stocks_not_in_db) > 0:
@@ -41,8 +46,10 @@ def publish_data(
         else:
             stocks_in_db_mapping = StockRefMapping()
             for stock in stocks_in_db:
-                newest_histories = list(filter(lambda h: h.date == run_date, histories.get_by_symbol(stock["symbol"])))
-                stocks_in_db_mapping.add(stock["symbol"], newest_histories)
+                newest_histories: List[Union[History, Prediction]] = list(
+                    filter(lambda h: h.date == run_date, histories.get_by_symbol(stock.symbol))
+                )
+                stocks_in_db_mapping.add(stock.symbol, newest_histories)
 
             storage_helper.add_histories(stocks_in_db_mapping)
     if storage_helper.exists_generation(date=run_date, name=generation.name):

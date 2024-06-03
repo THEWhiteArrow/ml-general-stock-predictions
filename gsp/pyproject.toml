@@ -50,6 +50,7 @@ markers = [
 [tool.flake8]
 max-complexity = 10
 ignore = "E501,W503,W504,E203,W391"
+exclude = "generated/*"
 
 [tool.black]
 line-length = 120
