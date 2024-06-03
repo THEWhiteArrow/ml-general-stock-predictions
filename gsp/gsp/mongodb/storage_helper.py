@@ -121,7 +121,9 @@ class StorageHelper:
     def exists_history_for_date(self, date: datetime.date) -> bool:
         logger.info("Checking if histories exist for date...")
         histories_collection: pm.collection.Collection = self.load_collection(StorageCollections.HISTORIES)
-        history = histories_collection.find_one({"date": date})
+        history = histories_collection.find_one(
+            {"date": datetime.datetime(date.year, date.month, date.day).isoformat()}
+        )
 
         return history is not None
 
@@ -132,7 +134,7 @@ class StorageHelper:
 
         query: Dict = {}
         if date is not None:
-            query["date"] = date
+            query["date"] = datetime.datetime(date.year, date.month, date.day).isoformat()
         if name is not None:
             query["name"] = name
 
