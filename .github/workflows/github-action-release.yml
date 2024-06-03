@@ -11,6 +11,8 @@ jobs:
     release:
         if: contains(github.event.head_commit.message, '#major') || contains(github.event.head_commit.message, '#minor') || contains(github.event.head_commit.message, '#patch')
         runs-on: ubuntu-latest
+        environment: testing
+
         permissions:
             contents: write
         steps:
@@ -29,6 +31,13 @@ jobs:
 
             - name: Install dependencies
               run: make install
+
+            - name: Setup Environment
+              run: |
+                  echo "DB_USER=${{secrets.DB_USER}}" >> ./gsp/.env
+                  echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> ./gsp/.env
+                  echo "DB_NAME=${{secrets.DB_NAME}}" >> ./gsp/.env
+                  echo "CLUSTER_NAME=${{secrets.CLUSTER_NAME}}" >> ./gsp/.env
 
             - name: Run formatting check
               run: make fmt-check
