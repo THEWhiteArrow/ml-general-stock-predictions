@@ -1,4 +1,5 @@
 import datetime
+from gsp.scraper.run import scrape
 from lib.logger.setup import setup_logger
 from gsp.model.model import generate_prediction
 from gsp.publisher.run import run as publisher_run
@@ -9,6 +10,9 @@ logger = setup_logger(__name__)
 def run(run_date: datetime.date):
 
     logger.info(f"Running GSP for {run_date.isoformat()}...")
+
+    logger.info("Scraping data...")
+    scrape()
 
     logger.info("Running Model...")
     generate_prediction(
