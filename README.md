@@ -13,6 +13,10 @@ This project aims to forecast the stock prices of multiple companies using a mac
 All the data is automatically gathered and basic analysis is performed.
 Model is trained and capable of saving the predictions for the upcoming days.
 
+## Phase 2
+
+The results of predictions are persisted in cloud storage. The databse of choise is MongoDb.
+
 ## Visual Studio Code
 
 The project is developed using dev containers in Visual Studio Code. The dev container is based on the `Python 3` image. The dev container is configured to use the `Python 3.12` interpreter.
