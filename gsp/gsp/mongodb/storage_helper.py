@@ -1,7 +1,8 @@
+import datetime
 import re
 from dataclasses import dataclass
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 import pymongo as pm
 from dotenv import load_dotenv
 from lib.logger.setup import setup_logger
@@ -117,6 +118,29 @@ class StorageHelper:
             stock.id = results.inserted_ids[i]
         return stocks
 
+    def exists_history_for_date(self, date: datetime.date) -> bool:
+        logger.info("Checking if histories exist for date...")
+        histories_collection: pm.collection.Collection = self.load_collection(StorageCollections.HISTORIES)
+        history = histories_collection.find_one({"date": date})
+
+        return history is not None
+
+    def exists_generation(self, date: Optional[datetime.date], name: Optional[str]) -> bool:
+        logger.info("Checking if generation exists...")
+        if date is None and name is None:
+            raise Exception("Please provide either date or name")
+
+        query: Dict = {}
+        if date is not None:
+            query["date"] = date
+        if name is not None:
+            query["name"] = name
+
+        generations_collection: pm.collection.Collection = self.load_collection(StorageCollections.GENERATIONS)
+        generation = generations_collection.find_one(query)
+
+        return generation is not None
+
     def add_histories(self, mapping: StockRefMapping) -> pm.results.InsertManyResult:
         logger.info("Adding histories...")
 
@@ -142,7 +166,7 @@ class StorageHelper:
 
     def add_generation_with_predictions(
         self, generation: Generation, mapping: StockRefMapping
-    ) -> pm.results.InsertManyResult:
+    ) -> Tuple[pm.results.InsertManyResult, pm.results.InsertManyResult]:
         logger.info("Adding generation with predictions...")
 
         stocks_symbols: List[str] = mapping.get_symbols()
@@ -154,9 +178,6 @@ class StorageHelper:
 
         stocks_retrived_mapping: Dict[str, Dict] = {stock["symbol"]: stock for stock in stocks_retrived}
 
-        generation_results = self.insert_documents(StorageCollections.GENERATIONS, [generation.to_dict()])
-        generation_id: str = generation_results.inserted_ids[0]
-
         all_predictions: List[Dict] = []
         for stock_symbol, predictions in mapping.get_items():
             all_predictions.extend(
@@ -164,12 +185,14 @@ class StorageHelper:
                     {
                         **prediction.to_dict(),
                         "stock": stocks_retrived_mapping[stock_symbol]["_id"],
-                        "generation": generation_id,
                     }
                     for prediction in predictions
                 ]
             )
 
         predictions_results = self.insert_documents(StorageCollections.PREDICTIONS, all_predictions)
+        generation_results = self.insert_documents(
+            StorageCollections.GENERATIONS, [{**generation.to_dict(), "predictions": predictions_results.inserted_ids}]
+        )
 
-        return predictions_results
+        return generation_results, predictions_results

@@ -5,6 +5,9 @@ from generated.stock import Stock
 from gsp.mongodb.stock_ref_mapping import StockRefMapping
 from gsp.mongodb.storage_collections import StorageCollections
 from gsp.mongodb.storage_helper import StorageHelper
+from lib.logger.setup import setup_logger
+
+logger = setup_logger(__name__)
 
 
 def publish_data(
@@ -32,12 +35,17 @@ def publish_data(
             not_in_db_mapping.add(stock.symbol, histories.get_by_symbol(stock.symbol))
         storage_helper.add_histories(not_in_db_mapping)
 
-    stocks_in_db_mapping = StockRefMapping()
-    for stock in stocks_in_db:
-        stocks_in_db_mapping.add(stock["symbol"], histories.get_by_symbol(stock["symbol"]))
-        newest_histories = list(filter(lambda h: h.date == run_date, histories.get_by_symbol(stock["symbol"])))
-        stocks_in_db_mapping.add(stock["symbol"], newest_histories)
+    if len(stocks_not_in_db) != len(stocks) and storage_helper.exists_history_for_date(run_date):
+        if storage_helper.exists_history_for_date(run_date):
+            logger.warning(f"History for date {run_date} already exists in the database")
+        else:
+            stocks_in_db_mapping = StockRefMapping()
+            for stock in stocks_in_db:
+                newest_histories = list(filter(lambda h: h.date == run_date, histories.get_by_symbol(stock["symbol"])))
+                stocks_in_db_mapping.add(stock["symbol"], newest_histories)
 
-    storage_helper.add_histories(stocks_in_db_mapping)
-
-    storage_helper.add_generation_with_predictions(generation, predictions)
+            storage_helper.add_histories(stocks_in_db_mapping)
+    if storage_helper.exists_generation(date=run_date, name=generation.name):
+        logger.warning(f"Generation for date {run_date} and name {generation.name} already exists in the database")
+    else:
+        storage_helper.add_generation_with_predictions(generation, predictions)

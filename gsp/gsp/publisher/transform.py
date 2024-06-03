@@ -6,9 +6,13 @@ from generated.history import History
 from generated.prediction import Prediction
 from generated.stock import Stock
 from gsp.mongodb.stock_ref_mapping import StockRefMapping
+from lib.logger.setup import setup_logger
+
+logger = setup_logger(__name__)
 
 
 def transform_generation(df: pd.DataFrame) -> Generation:
+    logger.info("Transforming generation data...")
     columns_to_json_load = ["categorical_features", "label_features", "shifts", "mwms", "hyper_params"]
     for column in columns_to_json_load:
         df[column] = df[column].apply(json.loads)
@@ -33,6 +37,7 @@ def transform_generation(df: pd.DataFrame) -> Generation:
 
 
 def transform_stocks(df: pd.DataFrame) -> List[Stock]:
+    logger.info("Transforming stocks data...")
     stocks_symbols = df["symbol"].unique()
     stocks: List[Stock] = []
 
@@ -46,6 +51,7 @@ def transform_stocks(df: pd.DataFrame) -> List[Stock]:
 
 
 def transform_predictions(df: pd.DataFrame) -> StockRefMapping:
+    logger.info("Transforming predictions data...")
     mapping = StockRefMapping()
     stock_symbols = df["symbol"].unique()
 
@@ -59,6 +65,7 @@ def transform_predictions(df: pd.DataFrame) -> StockRefMapping:
 
 
 def transform_histories(df: pd.DataFrame) -> StockRefMapping:
+    logger.info("Transforming histories data...")
     mapping = StockRefMapping()
     stock_symbols = df["symbol"].unique()
 
