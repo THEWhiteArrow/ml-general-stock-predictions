@@ -1,7 +1,7 @@
 import datetime
 from lib.logger.setup import setup_logger
 from gsp.model.model import generate_prediction
-
+from gsp.publisher.run import run as publisher_run
 
 logger = setup_logger(__name__)
 
@@ -22,6 +22,8 @@ def run(run_date: datetime.date):
         single_problem_approach=False,
         hyper_params={},
     )
+    logger.info("Publish results to database...")
+    publisher_run(run_date)
 
 
 if __name__ == "__main__":
