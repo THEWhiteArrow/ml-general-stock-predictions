@@ -44,13 +44,13 @@ def test_clean_data_no_missing_business_days():
 
     data = pd.DataFrame(
         {
-            "Date": [monday, tuesday, thursday, friday, monday, tuesday, thursday, friday],
-            "Name": ["AAPL", "AAPL", "AAPL", "AAPL", "GOOGL", "GOOGL", "GOOGL", "GOOGL"],
-            "Close": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
+            "date": [monday, tuesday, thursday, friday, monday, tuesday, thursday, friday],
+            "symbol": ["AAPL", "AAPL", "AAPL", "AAPL", "GOOGL", "GOOGL", "GOOGL", "GOOGL"],
+            "close": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
         }
     )
 
     # --- ACT ---
     cleaned_data = clean_data(data)
-    cleaned_data_dates = cleaned_data.index.get_level_values("Date").unique()
+    cleaned_data_dates = cleaned_data.index.get_level_values("date").unique()
     assert wednesday in cleaned_data_dates
