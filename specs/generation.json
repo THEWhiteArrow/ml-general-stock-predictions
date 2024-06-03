@@ -1,0 +1,80 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"$id": "Generation",
+	"title": "Generation",
+	"description": "Generation of the prediction",
+
+	"properties": {
+		"_id": {
+			"type": "string",
+			"description": "Optional ID of the object in the database"
+		},
+		"date": {
+			"type": "string",
+			"format": "date",
+			"description": "Date of the generation"
+		},
+		"name": {
+			"type": "string",
+			"description": "Name of the generation"
+		},
+		"created_at": {
+			"type": "string",
+			"format": "date-time",
+			"description": "Date and time of the generation creation"
+		},
+		"categorical_features": {
+			"type": "array",
+			"description": "List of categorical features used in the model",
+			"items": {
+				"type": "string"
+			}
+		},
+		"label_features": {
+			"type": "array",
+			"description": "List of label features used in the model",
+			"items": {
+				"type": "string"
+			}
+		},
+		"shifts": {
+			"type": "array",
+			"description": "List of shifts (lags) used in the model",
+			"items": {
+				"type": "integer"
+			}
+		},
+		"mwms": {
+			"type": "array",
+			"description": "List of moving window means used in the model",
+			"items": {
+				"type": "integer"
+			}
+		},
+		"days_back_to_consider": {
+			"description": "Number of days back to consider in the model",
+			"type": "integer"
+		},
+		"n_step": {
+			"description": "Number of steps to predict",
+			"type": "integer"
+		},
+		"hyper_params": {
+			"description": "Hyper parameters used in the model",
+			"type": "object"
+		}
+	},
+	"required": [
+		"categorical_features",
+		"label_features",
+		"shifts",
+		"mwms",
+		"days_back_to_consider",
+		"n_step",
+		"hyper_params",
+		"date",
+		"name",
+		"created_at"
+	]
+}

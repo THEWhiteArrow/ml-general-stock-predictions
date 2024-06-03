@@ -22,3 +22,19 @@ def load_output(file_name: str, dtypes: Dict | None = None, parse_dates: List[st
         return pd.read_csv(os.path.join(OUTPUT_DIR_PATH, file_name), dtype=dtypes or {}, parse_dates=parse_dates)
     except FileNotFoundError:
         return pd.DataFrame()
+
+
+def load_scraped_stocks() -> pd.DataFrame:
+    return pd.read_csv(
+        SCRAPED_STOCK_FILE_PATH,
+        dtype={
+            "Date": "period[D]",
+            "Open": "float",
+            "High": "float",
+            "Low": "float",
+            "Close": "float",
+            "Volume": "int",
+            "Area": "category",
+            "Symbol": "category",
+        },
+    )

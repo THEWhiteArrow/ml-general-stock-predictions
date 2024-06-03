@@ -1802,18 +1802,15 @@ files = [
 ]
 
 [[package]]
-name = "mongoengine"
-version = "0.28.2"
-description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB."
+name = "mongo-types"
+version = "0.15.1"
+description = "Type stubs for mongoengine w/ basic support for bson and pymongo"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "mongoengine-0.28.2-py3-none-any.whl", hash = "sha256:8e0f84a5ad3d335e5da98261454d4ab546c866241ed064adc6433fe2077d43c9"},
-    {file = "mongoengine-0.28.2.tar.gz", hash = "sha256:67c35a2ebe0ee7fd8eda3766dc251b9e0aada4489bb935f7a55b4c570d148ca7"},
+    {file = "mongo-types-0.15.1.tar.gz", hash = "sha256:0a9deeb7733ea7da5db3711d92e22d93556b522f860bbff82e5df44c53bd06a9"},
+    {file = "mongo_types-0.15.1-py3-none-any.whl", hash = "sha256:9417ae5b9a759c09630b5ec7d66904cc333c2d2fcfe75e2760a332ed5e267309"},
 ]
-
-[package.dependencies]
-pymongo = ">=3.4,<5.0"
 
 [[package]]
 name = "mypy"
@@ -3629,4 +3626,4 @@ scikit-learn = ["scikit-learn"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "f1c027c212e2e5ec0dd80a6fd1ff9dd53264cd182aeb6e285487224c7cb897d9"
+content-hash = "7d88214e6aac43574c429ad036ab42b331e5a851c6e2f4949e48cdd3e92feeca"

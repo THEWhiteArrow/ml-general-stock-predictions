@@ -1,0 +1,22 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"$id": "prediction",
+	"title": "Prediction",
+	"description": "Prediction data",
+	"properties": {
+		"_id": {
+			"type": "string",
+			"description": "Optional ID of the object in the database"
+		},
+		"date": {
+			"type": "string",
+			"format": "date",
+			"description": "Predicted date"
+		},
+		"close": {
+			"type": "number",
+			"description": "Predicted value of the close price"
+		}
+	}
+}

@@ -1,5 +1,6 @@
 # GENERAL STOCK PREDICTIONS
 
+[![CD](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-cd.yml/badge.svg)](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-cd.yml)
 [![CI](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-ci.yml/badge.svg)](https://github.com/THEWhiteArrow/ml-general-stock-predictions/actions/workflows/github-action-ci.yml/badge.svg)
 ![GitHub Latest Release)](https://img.shields.io/github/v/release/THEWhiteArrow/ml-general-stock-predictions?logo=github)
 

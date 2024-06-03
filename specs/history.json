@@ -1,0 +1,39 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"$id": "history",
+	"title": "History",
+	"description": "A stock price history object",
+	"properties": {
+		"_id": {
+			"type": "string",
+			"description": "Optional ID of the object in the database"
+		},
+		"date": {
+			"type": "string",
+			"format": "date",
+			"description": "The date of the stock price"
+		},
+		"close": {
+			"type": "number",
+			"description": "The closing price of the stock on the given date"
+		},
+		"high": {
+			"type": "number",
+			"description": "The highest price of the stock on the given date"
+		},
+		"low": {
+			"type": "number",
+			"description": "The lowest price of the stock on the given date"
+		},
+		"open": {
+			"type": "number",
+			"description": "The opening price of the stock on the given date"
+		},
+		"volume": {
+			"type": "integer",
+			"description": "The volume of the stock traded on the given date"
+		}
+	},
+	"required": ["date", "close", "high", "low", "open", "volume"]
+}

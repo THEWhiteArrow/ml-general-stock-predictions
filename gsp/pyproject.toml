@@ -26,8 +26,9 @@ optuna = "^3.6.1"
 scikit-learn = "^1.4.2"
 jupyter = "^1.0.0"
 python-dotenv = "^1.0.1"
-mongoengine = "^0.28.2"
 blinker = "^1.8.2"
+pymongo = "^4.7.2"
+mongo-types = "^0.15.1"
 
 [tool.poe.tasks]
 scrape = "python -m gsp.scraper.scraper"
@@ -49,6 +50,7 @@ markers = [
 [tool.flake8]
 max-complexity = 10
 ignore = "E501,W503,W504,E203,W391"
+exclude = "generated/*"
 
 [tool.black]
 line-length = 120

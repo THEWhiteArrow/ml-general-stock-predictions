@@ -19,6 +19,7 @@
 			"name": "Python: GSP Pipeline",
 			"type": "debugpy",
 			"request": "launch",
+			"console": "internalConsole",
 			"program": "${workspaceFolder}/gsp/gsp/run.py"
 		},
 		{
@@ -32,14 +33,22 @@
 			"name": "Python: Scraper",
 			"type": "debugpy",
 			"request": "launch",
+			"console": "internalConsole",
 			"program": "${workspaceFolder}/gsp/gsp/scraper/run.py"
+		},
+		{
+			"name": "Python: Publisher",
+			"type": "debugpy",
+			"request": "launch",
+			"console": "internalConsole",
+			"program": "${workspaceFolder}/gsp/gsp/publisher/run.py"
 		},
 		{
 			"name": "Python Debugger: Current File",
 			"type": "debugpy",
 			"request": "launch",
 			"program": "${file}",
-			"console": "integratedTerminal"
+			"console": "internalConsole"
 		}
 	]
 }

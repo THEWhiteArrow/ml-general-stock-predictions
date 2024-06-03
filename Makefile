@@ -1,6 +1,12 @@
 install:
-	@echo "Installing dependencies..."
+	@echo "Installing poetry dependencies..."
 	cd gsp && poetry install
+	@echo "Installing npm dependencies..."
+	npm install quicktype -g
+	@echo "Converting schemas to code..."
+	make codegen
+	@echo "Converting notebooks..."
+	make convert
 
 scrape:
 	@echo "Scraping..."
@@ -42,3 +48,18 @@ convert:
 pipeline:
 	@echo "Running pipeline..."
 	cd gsp && poetry run poe pipeline 
+
+codegen:
+	@echo "Generating code..."
+	quicktype -s schema -l python -o ./gsp/generated/stock.py ./specs/stock.json
+	quicktype -s schema -l python -o ./gsp/generated/history.py ./specs/history.json
+	quicktype -s schema -l python -o ./gsp/generated/prediction.py ./specs/prediction.json
+	quicktype -s schema -l python -o ./gsp/generated/generation.py ./specs/generation.json
+
+clean:
+	@echo "Cleaning..."
+	rm ./gsp/generated/*.py -f 
+	rm ./gsp/gsp/model/model.py -f
+	rm ./gsp/gsp/model/eda.py -f
+
+
