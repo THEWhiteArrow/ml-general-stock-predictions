@@ -121,9 +121,7 @@ class StorageHelper:
     def exists_history_for_date(self, date: datetime.date) -> bool:
         logger.info("Checking if histories exist for date...")
         histories_collection: pm.collection.Collection = self.load_collection(StorageCollections.HISTORIES)
-        history = histories_collection.find_one(
-            {"date": datetime.datetime(date.year, date.month, date.day).isoformat()}
-        )
+        history = histories_collection.find_one({"date": datetime.datetime(date.year, date.month, date.day)})
 
         return history is not None
 
@@ -134,7 +132,7 @@ class StorageHelper:
 
         query: Dict = {}
         if date is not None:
-            query["date"] = datetime.datetime(date.year, date.month, date.day).isoformat()
+            query["date"] = datetime.datetime(date.year, date.month, date.day)
         if name is not None:
             query["name"] = name
 
@@ -159,7 +157,10 @@ class StorageHelper:
 
         for stock_symbol, histories in mapping.get_items():
             all_histories.extend(
-                [{**history.to_dict(), "stock": stocks_retrived_mapping[stock_symbol]["_id"]} for history in histories]
+                [
+                    {**history.to_dict(), "date": history.date, "stock": stocks_retrived_mapping[stock_symbol]["_id"]}
+                    for history in histories
+                ]
             )
 
         results = self.insert_documents(StorageCollections.HISTORIES, all_histories)
@@ -186,6 +187,7 @@ class StorageHelper:
                 [
                     {
                         **prediction.to_dict(),
+                        "date": prediction.date,
                         "stock": stocks_retrived_mapping[stock_symbol]["_id"],
                     }
                     for prediction in predictions
@@ -194,7 +196,15 @@ class StorageHelper:
 
         predictions_results = self.insert_documents(StorageCollections.PREDICTIONS, all_predictions)
         generation_results = self.insert_documents(
-            StorageCollections.GENERATIONS, [{**generation.to_dict(), "predictions": predictions_results.inserted_ids}]
+            StorageCollections.GENERATIONS,
+            [
+                {
+                    **generation.to_dict(),
+                    "date": generation.date,
+                    "created_at": generation.created_at,
+                    "predictions": predictions_results.inserted_ids,
+                }
+            ],
         )
 
         return generation_results, predictions_results
