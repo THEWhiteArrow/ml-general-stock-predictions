@@ -31,7 +31,7 @@ pymongo = "^4.7.2"
 mongo-types = "^0.15.1"
 
 [tool.poe.tasks]
-scrape = "python -m gsp.scraper.scraper"
+scrape = "python -m gsp.scraper.run"
 lint = "flake8 ."
 fmt = "black ."
 fmt-check = "black --check ."

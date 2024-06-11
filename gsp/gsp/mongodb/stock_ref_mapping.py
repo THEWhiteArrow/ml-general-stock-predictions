@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple, TypeAlias, Union
+import datetime
+from typing import Dict, List, Optional, Tuple, TypeAlias, Union
 from generated.history import History
 from generated.prediction import Prediction
 
@@ -27,3 +28,20 @@ class StockRefMapping:
 
     def get_items(self) -> List[Tuple[STOCK_NAME_ALIAS, List[Union[History, Prediction]]]]:
         return [(stock_name, stock) for stock_name, stock in self.mapping.items()]
+
+    def filter_by_date(
+        self, start_date: Optional[datetime.date], end_date: Optional[datetime.date]
+    ) -> "StockRefMapping":
+
+        start_date = start_date or datetime.date.min
+        end_date = end_date or datetime.date.max
+
+        start_date_obj = datetime.datetime.combine(start_date, datetime.datetime.min.time())
+        end_date_obj = datetime.datetime.combine(end_date, datetime.datetime.max.time())
+
+        for stock_name, data in self.mapping.items():
+            self.mapping[stock_name] = [
+                d for d in data if (d.date and d.date >= start_date_obj and d.date <= end_date_obj)
+            ]
+
+        return self

@@ -19,13 +19,6 @@
 		{ "company_name": "SAP", "stock_id": "SAP" },
 		{ "company_name": "Intuit", "stock_id": "INTU" }
 	],
-	"hardware": [
-		{ "company_name": "Apple", "stock_id": "AAPL" },
-		{ "company_name": "Samsung", "stock_id": "005930.KS" },
-		{ "company_name": "Intel", "stock_id": "INTC" },
-		{ "company_name": "HP", "stock_id": "HPQ" },
-		{ "company_name": "Dell", "stock_id": "DELL" }
-	],
 	"startups": [
 		{ "company_name": "Uber", "stock_id": "UBER" },
 		{ "company_name": "Lyft", "stock_id": "LYFT" },

@@ -1,6 +1,7 @@
 # import datetime
 # from gsp.mongodb.stock_ref_mapping import StockRefMapping
-# from gsp.mongodb.storage_helper import StorageHelper
+from gsp.mongodb.storage_helper import StorageHelper
+
 # from generated.history import History
 from lib.logger.setup import setup_logger
 
@@ -8,6 +9,7 @@ logger = setup_logger(__name__)
 
 
 def run():
+
     # history = History.from_dict(
     #     {
     #         "name": "History",
@@ -22,8 +24,9 @@ def run():
     # )
     # logger.info(f"History: {history.to_dict()}")
 
-    # storage_helper = StorageHelper()
-    # storage_helper.setup_connection()
+    storage_helper = StorageHelper()
+    storage_helper.setup_connection()
+    storage_helper.cleanse("v2")
 
     # mapping = StockRefMapping()
     # mapping.add("GOOGL", [history])
