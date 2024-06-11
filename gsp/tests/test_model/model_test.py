@@ -1,3 +1,4 @@
+import datetime
 import pytest
 import pandas as pd
 from gsp.model.model import (
@@ -51,6 +52,6 @@ def test_clean_data_no_missing_business_days():
     )
 
     # --- ACT ---
-    cleaned_data = clean_data(data)
+    cleaned_data = clean_data(data, run_date=datetime.date(2024, 5, 22))
     cleaned_data_dates = cleaned_data.index.get_level_values("date").unique()
     assert wednesday in cleaned_data_dates

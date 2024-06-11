@@ -107,7 +107,7 @@ class StorageHelper:
 
         for collection_name in StorageCollections:
             if re.search(pattern, collection_name.value):
-                self.delete_documents(collection_name, {})
+                self.client[self.db_name].drop_collection(collection_name.value)  # type: ignore
 
     def save_stocks(self, stocks: List[Stock]) -> List[Stock]:
         logger.info("Saving stocks...")
@@ -125,6 +125,13 @@ class StorageHelper:
 
         return history is not None
 
+    def get_latest_history_date(self) -> Optional[datetime.date]:
+        logger.info("Getting the date of the last history...")
+        histories_collection: pm.collection.Collection = self.load_collection(StorageCollections.HISTORIES)
+        last_history = histories_collection.find_one(filter={}, sort=[("date", pm.DESCENDING)])
+
+        return last_history["date"].date() if last_history is not None else None
+
     def exists_generation(self, date: Optional[datetime.date], name: Optional[str]) -> bool:
         logger.info("Checking if generation exists...")
         if date is None and name is None:
@@ -141,7 +148,7 @@ class StorageHelper:
 
         return generation is not None
 
-    def add_histories(self, mapping: StockRefMapping) -> pm.results.InsertManyResult:
+    def add_histories(self, mapping: StockRefMapping) -> pm.results.InsertManyResult | None:
         logger.info("Adding histories...")
 
         stocks_symbols: List[str] = mapping.get_symbols()
@@ -162,6 +169,9 @@ class StorageHelper:
                     for history in histories
                 ]
             )
+        if len(all_histories) == 0:
+            logger.warning("No histories to add.")
+            return None
 
         results = self.insert_documents(StorageCollections.HISTORIES, all_histories)
 

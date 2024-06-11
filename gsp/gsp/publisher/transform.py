@@ -1,7 +1,8 @@
+import datetime
 import json
 import pandas as pd
 from generated.generation import Generation
-from typing import List, cast
+from typing import List, Optional, cast
 from generated.history import History
 from generated.prediction import Prediction
 from generated.stock import Stock
@@ -64,13 +65,29 @@ def transform_predictions(df: pd.DataFrame) -> StockRefMapping:
     return mapping
 
 
-def transform_histories(df: pd.DataFrame) -> StockRefMapping:
+def transform_histories(
+    df: pd.DataFrame,
+    filtered_symbols: List[str],
+    start_date: Optional[datetime.date],
+    end_date: Optional[datetime.date],
+) -> StockRefMapping:
     logger.info("Transforming histories data...")
     mapping = StockRefMapping()
-    stock_symbols = df["symbol"].unique()
+    df_cpy = df.copy()
+
+    if start_date is not None:
+        logger.info(f"Filtering data from {start_date.isoformat()}")
+        df_cpy = df_cpy[df_cpy["date"] >= start_date.isoformat()]
+    if end_date is not None:
+        logger.info(f"Filtering data until {end_date.isoformat()}")
+        df_cpy = df_cpy[df_cpy["date"] <= end_date.isoformat()]
+
+    stock_symbols = df_cpy["symbol"].unique()
 
     for stock_symbol in stock_symbols:
-        stock_df = cast(pd.DataFrame, df[df["symbol"] == stock_symbol])
+        if stock_symbol not in filtered_symbols:
+            continue
+        stock_df = cast(pd.DataFrame, df_cpy[df_cpy["symbol"] == stock_symbol])
         histories_data = stock_df.to_dict(orient="records")
         histories = [History.from_dict(history) for history in histories_data]
         mapping.add(stock_symbol, histories)  # type: ignore

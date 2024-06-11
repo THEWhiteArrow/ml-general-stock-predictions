@@ -1,5 +1,6 @@
 import io
 import json
+import datetime
 import pandas as pd
 from lib.logger.setup import setup_logger
 from gsp.scraper.download import download_stocks_history_from_yahoo_api
@@ -12,7 +13,7 @@ from data import (
 logger = setup_logger()
 
 
-def scrape():
+def scrape(run_date: datetime.date):
     """
     The following code snippet has one aim: to download data that is used in the Machine Learning model.
     The data that is being downloaded is up-to-date meaning
@@ -27,7 +28,7 @@ def scrape():
 
     for area in stock_setup:
         for stock_company in stock_setup[area]:
-            data = download_stocks_history_from_yahoo_api(stock_id=stock_company["stock_id"])
+            data = download_stocks_history_from_yahoo_api(stock_id=stock_company["stock_id"], end_date=run_date)
 
             df = pd.read_csv(
                 io.StringIO(data),
@@ -54,4 +55,6 @@ def scrape():
 
 
 if __name__ == "__main__":
-    scrape()
+    run_date = datetime.date.today()
+    # run_date = datetime.date(year=2024, month=1, day=1)
+    scrape(run_date)

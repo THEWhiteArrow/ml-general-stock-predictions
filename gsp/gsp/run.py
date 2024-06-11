@@ -12,11 +12,12 @@ def run(run_date: datetime.date):
     logger.info(f"Running GSP for {run_date.isoformat()}...")
 
     logger.info("Scraping data...")
-    scrape()
+    scrape(run_date)
 
     logger.info("Running Model...")
     generate_prediction(
-        "Default multi-approach prediction",
+        run_date=run_date,
+        name="Default multi-approach prediction",
         n_steps=15,
         days_back_to_consider=3 * 252,
         label_features=["year"],
