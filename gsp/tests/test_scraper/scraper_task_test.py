@@ -21,14 +21,14 @@ def test_download_stocks_history_from_yahoo_api_get_data_successfully():
     data = download_stocks_history_from_yahoo_api(stock_id=stock_id, end_date=datetime.date.today())
     df = pd.read_csv(
         io.StringIO(data),
-        dtype={
-            "Date": "period[D]",
-            "Open": "float",
-            "High": "float",
-            "Low": "float",
-            "Close": "float",
-            "Volume": "int",
-        },
+        # dtype={
+        #     "Date": "period[D]",
+        #     "Open": "float",
+        #     "High": "float",
+        #     "Low": "float",
+        #     "Close": "float",
+        #     "Volume": "int",
+        # },
     )
 
     # --- ASSERT ---

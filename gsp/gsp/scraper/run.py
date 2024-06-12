@@ -30,17 +30,24 @@ def scrape(run_date: datetime.date):
         for stock_company in stock_setup[area]:
             data = download_stocks_history_from_yahoo_api(stock_id=stock_company["stock_id"], end_date=run_date)
 
-            df = pd.read_csv(
-                io.StringIO(data),
-                dtype={
-                    "Date": "period[D]",
-                    "Open": "float",
-                    "High": "float",
-                    "Low": "float",
-                    "Close": "float",
-                    "Volume": "int",
-                },
-            )
+            data_types = {
+                "Date": "period[D]",
+                "Open": "float",
+                "High": "float",
+                "Low": "float",
+                "Close": "float",
+                "Volume": "int",
+            }
+            df = pd.read_csv(io.StringIO(data))
+
+            # --- NOTE ---
+            # Handles random error where the rows contain null values
+            original_length = len(df)
+            df = df.dropna()
+            if len(df) < original_length:
+                logger.info(f"Removed {original_length - len(df)} rows with NaN values")
+
+            df = df.astype(data_types)
 
             df = df.rename(columns={col: col.lower().replace(" ", "_") for col in df.columns})
 
